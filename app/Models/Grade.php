@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
-    protected $table = 'tbl_cijfers'; // Specify the table name
+    protected $table = 'grades'; // Specify the table name
 
     public function subject()
     {

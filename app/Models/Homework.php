@@ -8,7 +8,7 @@ class Homework extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_huiswerk';
+    protected $table = 'homework';
 
     protected $fillable = [
         'user_id',

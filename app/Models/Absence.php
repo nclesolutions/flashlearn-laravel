@@ -8,7 +8,7 @@ class Absence extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_absentie';
+    protected $table = 'absence';
     protected $primaryKey = 'unique_id';
     public $incrementing = false;
     protected $fillable = ['user_id', 'reden', 'begintijd', 'eindtijd', 'gemaakt_date'];

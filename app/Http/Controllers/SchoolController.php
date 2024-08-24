@@ -16,34 +16,34 @@ class SchoolController extends Controller
 
 
         // Haal de org_id (school_id) van de gebruiker op
-        $userSchoolId = DB::table('tbl_perms')
+        $userSchoolId = DB::table('students')
             ->where('user_id', $userId)
             ->value('org_id');
 
         // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
         $schoolInfo = null;
         if ($userSchoolId) {
-            $schoolInfo = DB::table('tbl_orgs')
+            $schoolInfo = DB::table('schools')
                 ->where('org_id', $userSchoolId)
                 ->first();
         }
 
         // Haal school-specifieke nieuwsbrieven op, gesorteerd op created_at en beperkt tot 1
-        $schoolNewsletters = DB::table('tbl_newsletters')
-            ->join('users', 'tbl_newsletters.creator', '=', 'users.id') // Verbind de creator met de user tabel
+        $schoolNewsletters = DB::table('newsletters')
+            ->join('users', 'newsletters.creator', '=', 'users.id') // Verbind de creator met de user tabel
             ->where('school_id', $userSchoolId)
             ->orderBy('created_at', 'desc')
             ->limit(1)
-            ->select('tbl_newsletters.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
+            ->select('newsletters.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
             ->get();
 
         // Haal algemene nieuwsbrieven op (school_id is NULL), gesorteerd op created_at en beperkt tot 3
-        $generalNewsletters = DB::table('tbl_newsletters')
-            ->join('users', 'tbl_newsletters.creator', '=', 'users.id') // Verbind de creator met de user tabel
+        $generalNewsletters = DB::table('newsletters')
+            ->join('users', 'newsletters.creator', '=', 'users.id') // Verbind de creator met de user tabel
             ->whereNull('school_id')
             ->orderBy('created_at', 'desc')
             ->limit(3)
-            ->select('tbl_newsletters.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
+            ->select('newsletters.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
             ->get();
 
         // Combineer school-specifieke en algemene nieuwsbrieven

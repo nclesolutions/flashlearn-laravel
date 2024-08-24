@@ -1,12 +1,10 @@
 <?php
-
 use App\Http\Controllers\AbsenceController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\HomeworkController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Middleware\CheckUserActivation;
@@ -47,23 +45,19 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
     Route::get('/school', [SchoolController::class, 'index'])->name('school.index');
 });
 
-// Authentication Routes
-Route::prefix('auth')->group(function () {
-    Route::get('/inloggen', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::get('/geblokkeerd', [AuthController::class, 'showBlocked'])->name('blocked');
-    Route::get('/onderhoud', [AuthController::class, 'showMaintenance'])->name('maintenance');
-    Route::post('/inloggen', [AuthController::class, 'login'])->name('login.post');
-    Route::get('/aanmelden', [AuthController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/aanmelden', [AuthController::class, 'register'])->name('register.post');
+Route::get('/inloggen', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/geblokkeerd', [AuthController::class, 'showBlocked'])->name('blocked');
+Route::get('/onderhoud', [AuthController::class, 'showMaintenance'])->name('maintenance');
 
-    // Password Reset Routes
-    Route::get('/wachtwoord/vergeten', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
-    Route::post('/wachtwoord/vergeten', [AuthController::class, 'sendResetLink'])->name('password.email');
-    Route::get('/wachtwoord/reset/{token?}', [AuthController::class, 'showResetForm'])->name('password.reset');
-    Route::post('/wachtwoord/reset', [AuthController::class, 'resetPassword'])->name('password.update');
-});
+Route::post('/inloggen', [AuthController::class, 'login'])->name('login.post');
+Route::get('/aanmelden', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/aanmelden', [AuthController::class, 'register'])->name('register.post');
+Route::get('/wachtwoord/vergeten', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/wachtwoord/vergeten', [AuthController::class, 'sendResetLink'])->name('password.email');
 
-// Logout Route
+Route::get('/wachtwoord/reset/{token?}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/wachtwoord/reset', [AuthController::class, 'resetPassword'])->name('password.update');
+
 Route::middleware(['auth'])->group(function () {
     Route::post('/api/uitloggen', function () {
         Auth::logout();
@@ -73,9 +67,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('logout');
 });
 
-// Email Verification Routes
-Route::prefix('email')->group(function () {
-    Route::get('/verify', [VerificationController::class, 'show'])->name('verification.notice');
-    Route::get('/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
-    Route::post('/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::middleware(['auth', 'signed'])->group(function () {
+    Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+    Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 });

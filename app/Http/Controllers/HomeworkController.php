@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Homework;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use IntlDateFormatter;
@@ -21,7 +20,7 @@ class HomeworkController extends Controller
         $user_id = Auth::id();
 
         // Query om het huiswerk op te halen
-        $homework = DB::table('tbl_huiswerk')
+        $homework = DB::table('homework')
             ->where('user_id', $user_id)
             ->orderBy('inlever_date')
             ->get();

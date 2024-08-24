@@ -15,7 +15,7 @@ class ProjectController extends Controller
         $vak = $request->input('vak', 'all');
 
         // Fetch unique vakken that have associated werkstukken
-        $availableVakken = DB::table('tbl_werkstukken')
+        $availableVakken = DB::table('projects')
             ->select('vak')
             ->groupBy('vak')
             ->havingRaw('COUNT(*) > 0')
@@ -25,23 +25,23 @@ class ProjectController extends Controller
         // Query to count all rows in the "werkstukken" table
         if ($vak == 'all') {
             // Count all werkstukken when no filter is applied
-            $werkstukcount = DB::table('tbl_werkstukken')->count();
+            $werkstukcount = DB::table('projects')->count();
         } else {
             // Count filtered werkstukken
-            $werkstukcount = DB::table('tbl_werkstukken')->where('vak', $vak)->count();
+            $werkstukcount = DB::table('projects')->where('vak', $vak)->count();
         }
 
         // Query to get the werkstukken based on the selected subject
         if ($vak == 'all') {
-            $werkstukken = DB::table('tbl_werkstukken')->get();
+            $werkstukken = DB::table('projects')->get();
         } else {
-            $werkstukken = DB::table('tbl_werkstukken')->where('vak', $vak)->get();
+            $werkstukken = DB::table('projects')->where('vak', $vak)->get();
         }
 
         // Iterate through werkstukken and fetch related data
         foreach ($werkstukken as $werkstuk) {
             $werkstuk->creator = DB::table('users')->where('id', $werkstuk->owner_id)->first();
-            $werkstuk->total_characters = DB::table('tbl_werkstukken')
+            $werkstuk->total_characters = DB::table('projects')
                 ->where('id', $werkstuk->id)
                 ->sum(DB::raw('CHAR_LENGTH(content)'));
         }
@@ -53,7 +53,7 @@ class ProjectController extends Controller
     public function view($id)
     {
         // Retrieve the werkstuk based on the unique_id
-        $werkstuk = DB::table('tbl_werkstukken')->where('unique_id', $id)->first();
+        $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
 
         if (!$werkstuk) {
             return redirect()->route('dashboard.project.index')->with('error', 'Werkstuk niet gevonden');
@@ -76,11 +76,11 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         // Retrieve the werkstuk by its unique ID
-        $werkstuk = DB::table('tbl_werkstukken')->where('unique_id', $id)->first();
+        $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
 
         // Check if the werkstuk exists and if the current user is the owner
         if ($werkstuk && $werkstuk->owner_id == Auth::id()) {
-            DB::table('tbl_werkstukken')->where('unique_id', $id)->delete();
+            DB::table('projects')->where('unique_id', $id)->delete();
 
             return redirect()->route('dashboard.project.index')->with('success', 'Werkstuk succesvol verwijderd.');
         }
@@ -91,7 +91,7 @@ class ProjectController extends Controller
     public function edit($id)
     {
         // Fetch the werkstuk based on its unique ID
-        $werkstuk = DB::table('tbl_werkstukken')->where('unique_id', $id)->first();
+        $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
 
         // If no werkstuk found, redirect back with an error
         if (!$werkstuk) {
@@ -112,7 +112,7 @@ class ProjectController extends Controller
         ]);
 
         // Update the werkstuk
-        DB::table('tbl_werkstukken')
+        DB::table('projects')
             ->where('unique_id', $request->werkstuk_id)
             ->update([
                 'title' => $request->title,

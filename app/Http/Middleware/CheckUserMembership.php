@@ -13,7 +13,7 @@ class CheckUserMembership
 
         if ($user) {
             // Query to check if the user is a member of a school
-            $membership = DB::table('tbl_perms')
+            $membership = DB::table('students')
                 ->where('user_id', $user->id)
                 ->first();
 
@@ -24,7 +24,7 @@ class CheckUserMembership
                 }
 
                 // Query to get school details
-                $school = DB::table('tbl_orgs')
+                $school = DB::table('schools')
                     ->where('org_id', $membership->org_id)
                     ->first();
 

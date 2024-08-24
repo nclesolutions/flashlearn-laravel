@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class VerificationController extends Controller
 {
     public function show()
     {
-
         if (!Auth::check()) {
-            // Redirect to the home page if the user is already logged in
             return redirect()->route('login');
         }
 
@@ -22,21 +21,29 @@ class VerificationController extends Controller
             : view('auth.verify');
     }
 
-    public function verify(EmailVerificationRequest $request)
+    public function verify(Request $request)
     {
-        // Controleer of de gebruiker is ingelogd
-        if (!Auth::check()) {
-            return redirect()->route('login');
+        // Get the user by ID
+        $user = User::findOrFail($request->route('id'));
+
+        // Check if the hash matches
+        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            return redirect()->route('login')->withErrors(['error' => 'Deze verificatielink is niet geldig!']);
         }
 
-        $request->fulfill();
+        // Check if the email is already verified
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('login')->with('success', 'Je e-mailadres is al geverifieerd.');
+        }
 
-        return redirect()->route('dashboard');
+        // Mark the email as verified
+        $user->markEmailAsVerified();
+
+        return redirect()->route('login')->with('success', 'Je e-mailadres is succesvol geverifieerd.');
     }
 
     public function resend(Request $request)
     {
-        // Controleer of de gebruiker is ingelogd
         if (!Auth::check()) {
             return redirect()->route('login');
         }

@@ -28,13 +28,34 @@
                         <h1 class="h3">Wachtwoord herstellen</h1>
                         <p class="text-muted">Voer je e-mailadres, nieuwe wachtwoord en bevestiging in om je wachtwoord te resetten.</p>
 
-                        @if($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
+                        @if($errors->any() || session('success') || session('warning'))
+                            <div class="alert
+                @if($errors->any()) alert-danger
+                @elseif(session('success')) alert-success
+                @elseif(session('warning')) alert-warning
+                @endif
+                alert-dismissible fade show" role="alert">
+                                <strong>
+                                    @if($errors->any())
+                                        {{ __('Oeps!') }}
+                                    @elseif(session('success'))
+                                        {{ __('Gelukt!') }}
+                                    @elseif(session('warning'))
+                                        {{ __('Let op!') }}
+                                    @endif
+                                </strong><br>
+
+                                @if($errors->any())
                                     @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
+                                        {{ $error }}<br>
                                     @endforeach
-                                </ul>
+                                @elseif(session('success'))
+                                    {{ session('success') }}
+                                @elseif(session('warning'))
+                                    {{ session('warning') }}
+                                @endif
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="margin-right: 0;"></button>
                             </div>
                         @endif
                         <form action="{{ route('password.update') }}" method="post" class="mt-4 register-form">

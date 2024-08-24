@@ -49,13 +49,34 @@
                             <h1 class="h3">Starten met FlashLearn!</h1>
                             <p class="text-muted">Ga vandaag nog aan de slag met uw gratis account. Geen creditcard nodig en geen opstartkosten.</p>
 
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
+                            @if($errors->any() || session('success') || session('warning'))
+                                <div class="alert
+                @if($errors->any()) alert-danger
+                @elseif(session('success')) alert-success
+                @elseif(session('warning')) alert-warning
+                @endif
+                alert-dismissible fade show" role="alert">
+                                    <strong>
+                                        @if($errors->any())
+                                            {{ __('Oeps!') }}
+                                        @elseif(session('success'))
+                                            {{ __('Gelukt!') }}
+                                        @elseif(session('warning'))
+                                            {{ __('Let op!') }}
+                                        @endif
+                                    </strong><br>
+
+                                    @if($errors->any())
                                         @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
+                                            {{ $error }}<br>
                                         @endforeach
-                                    </ul>
+                                    @elseif(session('success'))
+                                        {{ session('success') }}
+                                    @elseif(session('warning'))
+                                        {{ session('warning') }}
+                                    @endif
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="margin-right: 0;"></button>
                                 </div>
                             @endif
 

@@ -9,7 +9,7 @@ class Assignment extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_werkstukken';
+    protected $table = 'projects';
 
     protected $fillable = ['owner_id', 'title', 'content', 'submission_date'];
 }

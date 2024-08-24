@@ -15,7 +15,7 @@ class GradesController extends Controller
         $schoolId = session('org_id');
 
         // Fetch the subjects related to the user's school
-        $subjects = DB::table('tbl_vakken')
+        $subjects = DB::table('subjects')
             ->where('school_id', $schoolId)
             ->orderBy('gekregen_date', 'asc')
             ->get();
@@ -23,7 +23,7 @@ class GradesController extends Controller
         // Calculate the average grades for each subject
         $averageGrades = [];
         foreach ($subjects as $subject) {
-            $average = DB::table('tbl_cijfers')
+            $average = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
                 ->avg('grade');
@@ -39,14 +39,14 @@ class GradesController extends Controller
         $userId = Auth::id();
 
         // Fetch grades for the selected subject
-        $grades = DB::table('tbl_cijfers AS cijfers')
-            ->join('tbl_vakken AS vakken', 'cijfers.vak_id', '=', 'vakken.id')
+        $grades = DB::table('grades AS cijfers')
+            ->join('subjects AS vakken', 'cijfers.vak_id', '=', 'vakken.id')
             ->where('cijfers.user_id', $userId)
             ->where('vakken.vak_naam', $vak)
             ->get();
 
         // Fetch subjects to display in the sidebar
-        $subjects = DB::table('tbl_vakken')
+        $subjects = DB::table('subjects')
             ->where('school_id', session('org_id'))
             ->orderBy('gekregen_date', 'asc')
             ->get();
@@ -54,7 +54,7 @@ class GradesController extends Controller
         // Calculate the average grades for each subject
         $averageGrades = [];
         foreach ($subjects as $subject) {
-            $average = DB::table('tbl_cijfers')
+            $average = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
                 ->avg('grade');

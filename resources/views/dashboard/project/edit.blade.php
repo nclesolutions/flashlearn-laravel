@@ -85,7 +85,7 @@
                         <div id="kt_app_content" class="app-content flex-column-fluid">
 
                             <!-- Edit Form -->
-                            <form action="{{ url('/edit-werkstuk') }}" method="post">
+                            <form action="{{ route('werkstuk.update') }}" method="post">
                                 @csrf
 
                                 <div class="card rounded shadow-sm">

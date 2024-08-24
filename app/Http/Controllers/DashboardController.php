@@ -27,10 +27,10 @@ class DashboardController extends Controller
         // Count Assignments for the user
         $werkstukCount = Assignment::where('owner_id', $userId)->count();
 
-        $cijfers = Grade::select('tbl_cijfers.vak_id', 'tbl_cijfers.grade', 'tbl_vakken.vak_naam', 'tbl_cijfers.onderdeel', 'tbl_cijfers.date_created')
-            ->join('tbl_vakken', 'tbl_cijfers.vak_id', '=', 'tbl_vakken.id')
-            ->where('tbl_cijfers.user_id', $userId)
-            ->orderBy('tbl_cijfers.date_created', 'desc')
+        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.vak_naam', 'grades.onderdeel', 'grades.date_created')
+            ->join('subjects', 'grades.vak_id', '=', 'subjects.id')
+            ->where('grades.user_id', $userId)
+            ->orderBy('grades.date_created', 'desc')
             ->limit(3)
             ->get();
 

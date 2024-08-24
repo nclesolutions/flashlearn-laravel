@@ -24,14 +24,14 @@ class ProfileController extends Controller
             ->value('biography');
 
         // Haal de org_id (school_id) van de gebruiker op
-        $userSchoolId = DB::table('tbl_perms')
+        $userSchoolId = DB::table('students')
             ->where('user_id', $account->id) // Gebruik $account->id in plaats van $account
             ->value('org_id');
 
         // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
         $schoolInfo = null;
         if ($userSchoolId) {
-            $schoolInfo = DB::table('tbl_orgs')
+            $schoolInfo = DB::table('schools')
                 ->where('org_id', $userSchoolId)
                 ->first();
         }

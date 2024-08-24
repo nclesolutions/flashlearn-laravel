@@ -157,54 +157,55 @@
 
                                     </div>
 
-                                    <div class="row pt-5">
-                                        @foreach($werkstukken as $werkstuk)
-                                            <div class="col-md-6 col-lg-4 mb-4">
-                                                <div class="card card-custom rounded gutter-b">
-                                                    <div class="card-header pt-1">
-                                                        <div class="card-title">
-                                                            <h3 class="card-label">
-                                                                {{ $werkstuk->title }}
-                                                            </h3>
-                                                        </div>
+                                <div class="row pt-5">
+                                    @foreach($werkstukken as $werkstuk)
+                                        <div class="col-md-6 col-lg-4 mb-6"> <!-- Consistente margin-bottom voor elke kaart -->
+                                            <div class="card card-custom rounded gutter-b">
+                                                <div class="card-header pt-3 pb-2"> <!-- Aangepaste padding voor betere header spacing -->
+                                                    <div class="card-title">
+                                                        <h3 class="card-label">
+                                                            {{ $werkstuk->title }}
+                                                        </h3>
                                                     </div>
-                                                    <div class="card-body py-6">
-                                                        <div class="d-flex align-items-center mb-9">
-                                                            <div class="symbol symbol-70px symbol-circle me-5">
-                                                                <span class="symbol-label bg-light-success">
-                                                                    <i class="ki-outline ki-book-open fs-3x text-success"></i>
-                                                                </span>
-                                                            </div>
-                                                            <div class="m-0">
-                                                                <h4 class="fw-bold text-gray-800 mb-3">{{ $werkstuk->vak }}</h4>
-                                                                <div class="d-flex flex-column flex-shrink-0 me-4">
-                                                                    <span class="d-flex align-items-center fs-7 fw-bold text-gray-400 mb-2">
-                                                                        <i class="ki-outline ki-briefcase fs-6 text-gray-600 me-2"></i>{{ $werkstuk->niveau }}
-                                                                    </span>
-                                                                    <span class="d-flex align-items-center fs-7 fw-bold text-gray-400 mb-2">
-                                                                        <i class="ki-outline ki-note-2 fs-6 text-gray-600 me-2"></i>{{ $werkstuk->total_characters }} karakters
-                                                                    </span>
-                                                                    <span class="d-flex align-items-center text-gray-400 fw-bold fs-7">
-                                                                        <i class="ki-outline ki-user fs-6 text-gray-600 me-2"></i>    @if($werkstuk->creator)
-                                                                            {{ $werkstuk->creator->firstname }} {{ $werkstuk->creator->lastname }}
-                                                                        @else
-                                                                            Unknown Creator
-                                                                        @endif
-                                                                    </span>
-                                                                </div>
-                                                            </div>
+                                                </div>
+                                                <div class="card-body py-4"> <!-- Aangepaste padding voor body spacing -->
+                                                    <div class="d-flex align-items-center mb-4"> <!-- Verkleinde margin voor compacter design -->
+                                                        <div class="symbol symbol-70px symbol-circle me-4"> <!-- Verkleinde margin voor strakkere weergave -->
+                                                            <span class="symbol-label bg-light-success">
+                                <i class="ki-outline ki-book-open fs-3x text-success"></i>
+                            </span>
                                                         </div>
                                                         <div class="m-0">
-                                                            <a href="{{ url('/werkstuk/view/' . $werkstuk->unique_id) }}" class="btn rounded btn-sm btn-light me-2 mb-2">Bekijken</a>
-                                                            @if ($werkstuk->creator->id == Auth::id())
-                                                                <a href="{{ url('/werkstuk/bewerk/' . $werkstuk->unique_id) }}" class="btn rounded btn-sm btn-light me-2 mb-2">Bewerken</a>
-                                                            @endif
+                                                            <h4 class="fw-bold text-gray-800 mb-2">{{ $werkstuk->vak }}</h4> <!-- Verkleinde margin onder de titel -->
+                                                            <div class="d-flex flex-column flex-shrink-0 me-4">
+                                <span class="d-flex align-items-center fs-7 fw-bold text-gray-400 mb-1"> <!-- Verkleinde margin voor compactere lijst -->
+                                    <i class="ki-outline ki-briefcase fs-6 text-gray-600 me-2"></i>{{ $werkstuk->niveau }}
+                                </span>
+                                                                <span class="d-flex align-items-center fs-7 fw-bold text-gray-400 mb-1"> <!-- Verkleinde margin voor compactere lijst -->
+                                    <i class="ki-outline ki-note-2 fs-6 text-gray-600 me-2"></i>{{ $werkstuk->total_characters }} karakters
+                                </span>
+                                                                <span class="d-flex align-items-center text-gray-400 fw-bold fs-7">
+                                    <i class="ki-outline ki-user fs-6 text-gray-600 me-2"></i>
+                                    @if($werkstuk->creator)
+                                                                        {{ $werkstuk->creator->firstname }} {{ $werkstuk->creator->lastname }}
+                                                                    @else
+                                                                        Onbekende Maker
+                                                                    @endif
+                                </span>
+                                                            </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="m-0">
+                                                        <a href="{{ url('/werkstuk/view/' . $werkstuk->unique_id) }}" class="btn rounded btn-sm btn-light me-2 mb-2">Bekijken</a>
+                                                        @if ($werkstuk->creator->id == Auth::id())
+                                                            <a href="{{ url('/werkstuk/bewerk/' . $werkstuk->unique_id) }}" class="btn rounded btn-sm btn-light me-2 mb-2">Bewerken</a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
                                 </div>
                             </div>

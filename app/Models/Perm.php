@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Perm extends Model
 {
-    protected $table = 'tbl_perms';
+    protected $table = 'students';
     protected $fillable = ['user_id', 'org_id', 'perm'];
 
     public function org()

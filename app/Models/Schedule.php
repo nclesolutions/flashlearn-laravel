@@ -9,7 +9,7 @@ class Schedule extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_roosters';
+    protected $table = 'roosters';
 
     protected $fillable = ['user_id', 'roosters'];
 }
