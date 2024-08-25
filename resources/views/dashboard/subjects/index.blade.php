@@ -77,6 +77,9 @@
                                     <span class="page-desc text-gray-700 fw-semibold fs-6 pt-3">Op deze pagina vind je al je vakken!</span>
                                 </h1>
                             </div>
+                            <!--begin::DOMAIN-->
+                            @include('includes.domain')
+                            <!--end::DOMAIN-->
                         </div>
                     </div>
                 </div>

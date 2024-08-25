@@ -77,6 +77,9 @@
                                     <span class="page-desc text-gray-700 fw-semibold fs-6 pt-3">Op deze pagina vind je al je vakken!</span>
                                 </h1>
                             </div>
+                            <!--begin::DOMAIN-->
+                            @include('includes.domain')
+                            <!--end::DOMAIN-->
                         </div>
                     </div>
                 </div>
@@ -215,58 +218,68 @@
                                                     <div class="d-flex flex-column gap-5 mt-7">
                                                         <!--begin::Company name-->
                                                         <div class="d-flex flex-column gap-1">
-                                                            <div class="fw-bold text-muted">Company Name</div>
-                                                            <div class="fw-bold fs-5">Keenthemes Inc</div>
+                                                            <div class="fw-bold text-muted">Leermiddelen</div>
+                                                            <div class="fw-bold fs-5"><a href="https://www.noordhoff.nl/">Noordhoff Uitgevers</a></div>
                                                         </div>
                                                         <!--end::Company name-->
-                                                        <!--begin::City-->
-                                                        <div class="d-flex flex-column gap-1">
-                                                            <div class="fw-bold text-muted">City</div>
-                                                            <div class="fw-bold fs-5">Melbourne</div>
-                                                        </div>
-                                                        <!--end::City-->
-                                                        <!--begin::Country-->
-                                                        <div class="d-flex flex-column gap-1">
-                                                            <div class="fw-bold text-muted">Country</div>
-                                                            <div class="fw-bold fs-5">Australia</div>
-                                                        </div>
-                                                        <!--end::Country-->
                                                         <!--begin::Homework-->
-                                                        <div class="d-flex flex-column gap-4 my-6">
+                                                        <div class="d-flex flex-column gap-1">
                                                             <div class="fw-bold text-muted">Huiswerk</div>
 
+                                                            @php
+                                                                // Sorteer de collectie van huiswerkitems op basis van de inleverdatum (van oud naar nieuw)
+                                                                $sortedHomework = $selectedSubject->homework->sortBy('inlever_date');
+                                                            @endphp
+
                                                             @if($selectedSubject->homework->isEmpty())
-                                                                    <p class="mb-0 text-muted">Geen huiswerk gevonden.</p>
-
+                                                                <div class="fw-bold fs-5">Je hebt geen huiswerk.</div>
                                                             @else
-                                                                @foreach($selectedSubject->homework as $homework)
-                                                                    <!--begin::Homework Item-->
-                                                                    <div class="d-flex flex-stack position-relative">
-                                                                        <!--begin::Bar-->
-                                                                        <div class="position-absolute h-100 w-4px bg-info rounded top-0 start-0"></div>
-                                                                        <!--end::Bar-->
-                                                                        <!--begin::Info-->
-                                                                        <div class="fw-semibold ms-5 text-gray-600">
-                                                                            <!--begin::Time-->
-                                                                            <div class="fs-5">{{ $homework->inlever_date }}
 
-                                                                            </div>
-                                                                            <!--end::Time-->
-                                                                            <!--begin::Title-->
-                                                                            <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">{{ $homework->vak }} - {{ $homework->title }}</a>
-                                                                            <!--end::Title-->
-                                                                            <!--begin::Description-->
-                                                                            <div class="text-gray-500">{{ $homework->beschrijving }}</div>
-                                                                            <!--end::Description-->
-                                                                        </div>
-                                                                        <!--end::Info-->
-                                                                        <!--begin::Action-->
-                                                                        <a href="{{ route('dashboard.homework.view', ['id' => $homework->unique_id]) }}" class="btn btn-bg-light btn-active-color-primary btn-sm">Bekijken</a>
-                                                                        <!--end::Action-->
+
+                                                            @foreach($sortedHomework as $homework)
+                                                                @php
+                                                                    // Bereken het aantal dagen tot de inleverdatum
+                                                                    $daysUntilDue = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($homework->inlever_date), false);
+                                                                    $barColor = 'bg-info'; // Default kleur
+
+                                                                    // Pas de kleur aan op basis van het aantal dagen tot de inleverdatum
+                                                                    if ($daysUntilDue < 0) {
+                                                                        $barColor = 'bg-danger'; // Te laat
+                                                                    } elseif ($daysUntilDue <= 2) {
+                                                                        $barColor = 'bg-warning'; // Bijna te laat
+                                                                    } elseif ($daysUntilDue <= 7) {
+                                                                        $barColor = 'bg-primary'; // Binnenkort
+                                                                    } else {
+                                                                        $barColor = 'bg-success'; // Voldoende tijd
+                                                                    }
+                                                                @endphp
+
+                                                                    <!--begin::Homework Item-->
+                                                                <div class="d-flex flex-stack position-relative">
+                                                                    <!--begin::Bar-->
+                                                                    <div class="position-absolute h-100 w-4px {{ $barColor }} rounded top-0 start-0"></div>
+                                                                    <!--end::Bar-->
+                                                                    <!--begin::Info-->
+                                                                    <div class="fw-semibold ms-5 text-gray-600">
+                                                                        <!--begin::Time-->
+                                                                        <div class="fs-5">{{ \Carbon\Carbon::parse($homework->inlever_date)->format('d-m-Y') }}</div>
+                                                                        <!--end::Time-->
+                                                                        <!--begin::Title-->
+                                                                        <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">{{ $homework->vak }} - {{ $homework->title }}</a>
+                                                                        <!--end::Title-->
+                                                                        <!--begin::Description-->
+                                                                        <div class="text-gray-500">{{ $homework->beschrijving }}</div>
+                                                                        <!--end::Description-->
                                                                     </div>
-                                                                    <!--end::Homework Item-->
-                                                                @endforeach
+                                                                    <!--end::Info-->
+                                                                    <!--begin::Action-->
+                                                                    <a href="{{ route('dashboard.homework.view', ['id' => $homework->unique_id]) }}" class="btn btn-bg-light btn-active-color-primary btn-sm">Bekijken</a>
+                                                                    <!--end::Action-->
+                                                                </div>
+                                                                <!--end::Homework Item-->
+                                                            @endforeach
                                                             @endif
+
                                                         </div>
                                                         <!--end::Homework-->
 
@@ -278,1015 +291,40 @@
                                                 <div class="tab-pane fade" id="kt_contact_view_meetings" role="tabpanel">
                                                     <!--begin::Dates-->
                                                     <ul class="nav nav-pills d-flex flex-stack flex-nowrap scroll-x pb-2">
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_0">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Su</span>
-                                                                <span class="fs-6 fw-bold">22</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary active" data-bs-toggle="tab" href="#kt_schedule_day_1">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Mo</span>
-                                                                <span class="fs-6 fw-bold">23</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_2">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Tu</span>
-                                                                <span class="fs-6 fw-bold">24</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_3">
-                                                                <span class="opacity-50 fs-7 fw-semibold">We</span>
-                                                                <span class="fs-6 fw-bold">25</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_4">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Th</span>
-                                                                <span class="fs-6 fw-bold">26</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_5">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Fr</span>
-                                                                <span class="fs-6 fw-bold">27</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_6">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Sa</span>
-                                                                <span class="fs-6 fw-bold">28</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_7">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Su</span>
-                                                                <span class="fs-6 fw-bold">29</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_8">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Mo</span>
-                                                                <span class="fs-6 fw-bold">30</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
-                                                        <!--begin::Date-->
-                                                        <li class="nav-item me-1">
-                                                            <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary" data-bs-toggle="tab" href="#kt_schedule_day_9">
-                                                                <span class="opacity-50 fs-7 fw-semibold">Tu</span>
-                                                                <span class="fs-6 fw-bold">31</span>
-                                                            </a>
-                                                        </li>
-                                                        <!--end::Date-->
+                                                        @foreach ($dagen as $index => $dag)
+                                                            <li class="nav-item me-1">
+                                                                <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary {{ $index == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#kt_schedule_day_{{ $index }}">
+                                                                    <span class="opacity-50 fs-7 fw-semibold">{{ substr($dag, 0, 2) }}</span>
+                                                                    <span class="fs-6 fw-bold">{{ now()->startOfWeek()->addDays($index)->format('d') }}</span>
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
                                                     </ul>
                                                     <!--end::Dates-->
                                                     <!--begin::Tab Content-->
                                                     <div class="tab-content">
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_0" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-info rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">10:00 - 11:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">9 Degree Project Estimation Meeting</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">David Stevenson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
+                                                        @foreach ($dagen as $index => $dag)
+                                                            <div id="kt_schedule_day_{{ $index }}" class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}">
+                                                                @if (isset($filteredLessons[$dag]))
+                                                                    @foreach ($filteredLessons[$dag] as $les)
+                                                                        <div class="d-flex flex-stack position-relative my-6">
+                                                                            <div class="position-absolute h-100 w-4px bg-info rounded top-0 start-0"></div>
+                                                                            <div class="fw-semibold ms-5 text-gray-600">
+                                                                                <div class="fs-5">{{ $les['time'] }}
+                                                                                </div>
+                                                                                <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">{{ $les['lesson'] }}</a>
+                                                                                <div class="text-gray-500">Geleid door: <a href="#">{{ $les['teacher'] }}</a></div>
+                                                                            </div>
+                                                                            <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">Bekijk</a>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p class="text-gray-600">Geen lessen op {{ $dag }}.</p>
+                                                                @endif
                                                             </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">16:30 - 17:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Team Backlog Grooming Session</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Kendell Trevor</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-info rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Creative Content Initiative</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Michael Walters</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_1" class="tab-pane fade show active">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-info rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">12:00 - 13:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Development Team Capacity Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Karina Clarke</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">11:00 - 11:45
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Development Team Capacity Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Naomi Hayabusa</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Lunch & Learn Catch Up</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Terry Robins</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_2" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">13:00 - 14:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Development Team Capacity Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Kendell Trevor</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-danger rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">9:00 - 10:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Weekly Team Stand-Up</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Kendell Trevor</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-success rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">10:00 - 11:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Project Review & Testing</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Kendell Trevor</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_3" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">11:00 - 11:45
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Committee Review Approvals</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Karina Clarke</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">12:00 - 13:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">9 Degree Project Estimation Meeting</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Michael Walters</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-success rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">16:30 - 17:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Committee Review Approvals</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Karina Clarke</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_4" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-info rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Lunch & Learn Catch Up</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Peter Marcus</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-danger rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">13:00 - 14:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Lunch & Learn Catch Up</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Peter Marcus</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Committee Review Approvals</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Caleb Donaldson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_5" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">13:00 - 14:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Development Team Capacity Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Naomi Hayabusa</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">13:00 - 14:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Team Backlog Grooming Session</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Bob Harris</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Marketing Campaign Discussion</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Bob Harris</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_6" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">9:00 - 10:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Team Backlog Grooming Session</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">David Stevenson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-danger rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Development Team Capacity Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Bob Harris</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">13:00 - 14:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Lunch & Learn Catch Up</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">David Stevenson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_7" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-success rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">16:30 - 17:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Marketing Campaign Discussion</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Caleb Donaldson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-danger rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">12:00 - 13:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Sales Pitch Proposal</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Peter Marcus</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">11:00 - 11:45
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Project Review & Testing</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Walter White</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_8" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-success rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">9:00 - 10:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Team Backlog Grooming Session</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Karina Clarke</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-primary rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">11:00 - 11:45
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Committee Review Approvals</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Walter White</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-danger rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">9:00 - 10:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Committee Review Approvals</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Terry Robins</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
-                                                        <!--begin::Day-->
-                                                        <div id="kt_schedule_day_9" class="tab-pane fade show">
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-danger rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">16:30 - 17:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Development Team Capacity Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">David Stevenson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">14:30 - 15:30
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">pm</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Weekly Team Stand-Up</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Caleb Donaldson</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                            <!--begin::Time-->
-                                                            <div class="d-flex flex-stack position-relative my-6">
-                                                                <!--begin::Bar-->
-                                                                <div class="position-absolute h-100 w-4px bg-warning rounded top-0 start-0"></div>
-                                                                <!--end::Bar-->
-                                                                <!--begin::Info-->
-                                                                <div class="fw-semibold ms-5 text-gray-600">
-                                                                    <!--begin::Time-->
-                                                                    <div class="fs-5">9:00 - 10:00
-                                                                        <span class="fs-7 text-gray-500 text-uppercase">am</span></div>
-                                                                    <!--end::Time-->
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">Dashboard UI/UX Design Review</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::User-->
-                                                                    <div class="text-gray-500">Lead by
-                                                                        <a href="#">Michael Walters</a></div>
-                                                                    <!--end::User-->
-                                                                </div>
-                                                                <!--end::Info-->
-                                                                <!--begin::Action-->
-                                                                <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">View</a>
-                                                                <!--end::Action-->
-                                                            </div>
-                                                            <!--end::Time-->
-                                                        </div>
-                                                        <!--end::Day-->
+                                                        @endforeach
                                                     </div>
                                                     <!--end::Tab Content-->
-                                                </div>
-                                                <!--end:::Tab pane-->
-                                                <!--begin:::Tab pane-->
-                                                <div class="tab-pane fade" id="kt_contact_view_activity" role="tabpanel">
-                                                    <!--begin::Timeline-->
-                                                    <div class="timeline-label">
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">08:42</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-warning fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Text-->
-                                                            <div class="fw-mormal timeline-content text-muted ps-3">Outlines keep you honest. And keep structure</div>
-                                                            <!--end::Text-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">10:00</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-success fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Content-->
-                                                            <div class="timeline-content d-flex">
-                                                                <span class="fw-bold text-gray-800 ps-3">AEOL meeting</span>
-                                                            </div>
-                                                            <!--end::Content-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">14:37</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-danger fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Desc-->
-                                                            <div class="timeline-content fw-bold text-gray-800 ps-3">Make deposit
-                                                                <a href="#" class="text-primary">USD 700</a>. to ESL</div>
-                                                            <!--end::Desc-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">16:50</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-primary fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Text-->
-                                                            <div class="timeline-content fw-mormal text-muted ps-3">Indulging in poorly driving and keep structure keep great</div>
-                                                            <!--end::Text-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">21:03</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-danger fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Desc-->
-                                                            <div class="timeline-content fw-semibold text-gray-800 ps-3">New order placed
-                                                                <a href="#" class="text-primary">#XF-2356</a>.</div>
-                                                            <!--end::Desc-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">16:50</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-primary fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Text-->
-                                                            <div class="timeline-content fw-mormal text-muted ps-3">Indulging in poorly driving and keep structure keep great</div>
-                                                            <!--end::Text-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">21:03</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-danger fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Desc-->
-                                                            <div class="timeline-content fw-semibold text-gray-800 ps-3">New order placed
-                                                                <a href="#" class="text-primary">#XF-2356</a>.</div>
-                                                            <!--end::Desc-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                        <!--begin::Item-->
-                                                        <div class="timeline-item">
-                                                            <!--begin::Label-->
-                                                            <div class="timeline-label fw-bold text-gray-800 fs-6">10:30</div>
-                                                            <!--end::Label-->
-                                                            <!--begin::Badge-->
-                                                            <div class="timeline-badge">
-                                                                <i class="ki-outline ki-abstract-8 text-success fs-1"></i>
-                                                            </div>
-                                                            <!--end::Badge-->
-                                                            <!--begin::Text-->
-                                                            <div class="timeline-content fw-mormal text-muted ps-3">Finance KPI Mobile app launch preparion meeting</div>
-                                                            <!--end::Text-->
-                                                        </div>
-                                                        <!--end::Item-->
-                                                    </div>
-                                                    <!--end::Timeline-->
                                                 </div>
                                                 <!--end:::Tab pane-->
                                             </div>
