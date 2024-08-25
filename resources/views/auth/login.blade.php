@@ -14,7 +14,6 @@
 <body>
 <div id="preloader" class="bg-light-subtle">
     <div class="preloader-wrap">
-        <img src="{{ asset('auth/img/favicon.png') }}" alt="logo" class="img-fluid preloader-icon">
         <div class="loading-bar"></div>
     </div>
 </div>
@@ -88,7 +87,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
                                         <label class="form-check-label" for="remember_me">
-                                            Remember Me
+                                            Mij onthouden
                                         </label>
                                     </div>
                                 </div>
