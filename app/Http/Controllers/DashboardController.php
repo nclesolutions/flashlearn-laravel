@@ -12,7 +12,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-
         // Ensure the user is authenticated
         if (!Auth::check()) {
             return redirect()->route('login');
@@ -26,6 +25,9 @@ class DashboardController extends Controller
 
         // Count Assignments for the user
         $werkstukCount = Assignment::where('owner_id', $userId)->count();
+
+        // Get the user's assignments (werkstukken)
+        $werkstukken = Assignment::where('owner_id', $userId)->get();
 
         $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.vak_naam', 'grades.onderdeel', 'grades.date_created')
             ->join('subjects', 'grades.vak_id', '=', 'subjects.id')
@@ -56,6 +58,7 @@ class DashboardController extends Controller
             $weeks = [];
         }
 
-        return view('dashboard.index', compact('huiswerkCount', 'cijfers', 'werkstukCount', 'currentWeekRooster', 'nextWeek', 'prevWeek', 'weeks', 'weekNumber'));
+        return view('dashboard.index', compact('huiswerkCount', 'cijfers', 'werkstukCount', 'currentWeekRooster', 'nextWeek', 'prevWeek', 'weeks', 'weekNumber', 'werkstukken'));
     }
+
 }

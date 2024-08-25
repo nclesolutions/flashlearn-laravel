@@ -46,38 +46,47 @@
                             </a>
                         </div>
                     @endif
+                    @if (session('orgName'))
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class=" {{ checkActivePage(['werkstuk', 'werkstuk/*']) }} menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-                  <span class="menu-link">
-                  <span class="menu-title">Educatie</span>
-                  <span class="menu-arrow d-lg-none"></span>
-                  </span>
+   <span class="menu-link">
+   <span class="menu-title">Educatie</span>
+   <span class="menu-arrow d-lg-none"></span>
+   </span>
                         <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
                             <div class="menu-item">
                                 <a class="menu-link" href="{{ url('/leerweg') }}">
-                        <span class="menu-icon">
-                        <i class="ki-outline ki-rocket fs-2"></i>
-                        </span>
+         <span class="menu-icon">
+         <i class="ki-outline ki-rocket fs-2"></i>
+         </span>
                                     <span class="menu-title">Leerweg</span>
                                 </a>
                             </div>
                             <div class="menu-item">
                                 <a class="menu-link" href="{{ url('/werkstuk') }}">
-                        <span class="menu-icon">
-                        <i class="ki-outline ki-abstract-26 fs-2"></i>
-                        </span>
+         <span class="menu-icon">
+         <i class="ki-outline ki-abstract-26 fs-2"></i>
+         </span>
                                     <span class="menu-title">Werkstukken</span>
                                 </a>
                             </div>
                             <div class="menu-item">
                                 <a class="menu-link" href="{{ url('/boeken') }}">
-                        <span class="menu-icon">
-                        <i class="ki-outline ki-book fs-2"></i>
-                        </span>
+         <span class="menu-icon">
+         <i class="ki-outline ki-book fs-2"></i>
+         </span>
                                     <span class="menu-title">Leesboeken</span>
                                 </a>
                             </div>
                         </div>
                     </div>
+                    @else
+                        <div class="{{ checkActivePage(['werkstuk', 'werkstuk/*']) }} menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
+                            <a class="menu-link" href="{{ url('/werkstuk') }}">
+                                <span class="menu-title">Werkstukken</span>
+                                <span class="menu-arrow d-lg-none"></span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="app-navbar flex-shrink-0">
@@ -100,7 +109,6 @@
                          data-kt-menu-placement="bottom-end">
                         <img class="symbol symbol-circle symbol-35px symbol-md-40px" src="{{ Auth::user()->gravatar }}" alt="user" />
                     </div>
-
                     <!-- Begin::User account menu -->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
                          data-kt-menu="true">
@@ -113,8 +121,8 @@
                                     <div class="fw-bold d-flex align-items-center fs-5">
                                         {{ Auth::user()->firstname }}
                                         <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
-                                            {{ Auth::user()->getRoleNames()->first() }}
-</span>
+                              {{ Auth::user()->getRoleNames()->first() }}
+                              </span>
                                     </div>
                                     <a href="#" class="fw-semibold text-muted text-hover-primary fs-7"><b>@</b>{{ Auth::user()->username }}</a>
                                 </div>
@@ -139,35 +147,35 @@
                         <div class="separator my-2"></div>
                         <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
                             <a href="#" class="menu-link px-5">
-                <span class="menu-title position-relative">Thema
-                    <span class="ms-5 position-absolute translate-middle-y top-50 end-0">
-                        <i class="ki-outline ki-night-day theme-light-show fs-2"></i>
-                        <i class="ki-outline ki-moon theme-dark-show fs-2"></i>
-                    </span>
-                </span>
+                     <span class="menu-title position-relative">Thema
+                     <span class="ms-5 position-absolute translate-middle-y top-50 end-0">
+                     <i class="ki-outline ki-night-day theme-light-show fs-2"></i>
+                     <i class="ki-outline ki-moon theme-dark-show fs-2"></i>
+                     </span>
+                     </span>
                             </a>
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px">
                                 <div class="menu-item px-3 my-0">
                                     <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
-                        <span class="menu-icon" data-kt-element="icon">
-                            <i class="ki-outline ki-night-day fs-2"></i>
-                        </span>
+                           <span class="menu-icon" data-kt-element="icon">
+                           <i class="ki-outline ki-night-day fs-2"></i>
+                           </span>
                                         <span class="menu-title">Licht</span>
                                     </a>
                                 </div>
                                 <div class="menu-item px-3 my-0">
                                     <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
-                        <span class="menu-icon" data-kt-element="icon">
-                            <i class="ki-outline ki-moon fs-2"></i>
-                        </span>
+                           <span class="menu-icon" data-kt-element="icon">
+                           <i class="ki-outline ki-moon fs-2"></i>
+                           </span>
                                         <span class="menu-title">Donker</span>
                                     </a>
                                 </div>
                                 <div class="menu-item px-3 my-0">
                                     <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
-                        <span class="menu-icon" data-kt-element="icon">
-                            <i class="ki-outline ki-screen fs-2"></i>
-                        </span>
+                           <span class="menu-icon" data-kt-element="icon">
+                           <i class="ki-outline ki-screen fs-2"></i>
+                           </span>
                                         <span class="menu-title">Systeem</span>
                                     </a>
                                 </div>

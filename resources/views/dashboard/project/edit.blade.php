@@ -102,7 +102,12 @@
 
                                         <div class="input-group input-group-solid mb-5">
                                             <span class="input-group-text" id="basic-addon1">Niveau</span>
-                                            <input type="text" id="niveau" name="niveau" class="form-control" placeholder="Geef een niveau voor het werkstuk op." aria-label="Niveau" aria-describedby="basic-addon1" value="{{ $werkstuk->niveau }}" />
+                                            <select id="niveau" name="niveau" class="form-select rounded-start-0" aria-label="Niveau" aria-describedby="basic-addon1">
+                                                <option value="" disabled selected>Kies het niveau voor het werkstuk</option>
+                                                <option value="Makkelijk">Makkelijk</option>
+                                                <option value="Gemiddeld">Gemiddeld</option>
+                                                <option value="Moeilijk">Moeilijk</option>
+                                            </select>
                                         </div>
 
                                         <div class="input-group input-group-solid mb-5">

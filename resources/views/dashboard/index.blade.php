@@ -116,6 +116,8 @@
                     <div class="d-flex flex-column flex-column-fluid">
                         <!--begin::Content-->
                         <div id="kt_app_content" class="app-content flex-column-fluid">
+
+                            @if (session('orgName'))
                             <!--begin::Row-->
                             <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
                                 <!--begin::Col-->
@@ -286,8 +288,8 @@
                                                                 <span data-kt-element="bullet" class="bullet bullet-vertical d-flex align-items-center h-40px {{ $color }}"></span>
                                                             </td>
                                                             <td>
-                                                                <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">{{ $cijfer->vak_naam }}: <b>{{ $cijfer->grade }}</b></a>
-                                                                <span class="text-gray-400 fw-bold fs-7 d-block">{{ $cijfer->onderdeel }}</span>
+                                                                <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">Je hebt een <b>{{ $cijfer->grade }}</b> gehaald!</a>
+                                                                <span class="text-gray-400 fw-bold fs-7 d-block">{{ $cijfer->vak_naam }} - {{ $cijfer->onderdeel }}</span>
                                                             </td>
                                                             <td class="text-end">
                                                                 <span data-kt-element="status" class="badge {{ $badgeColor }}">{{ $status }}</span>
@@ -396,9 +398,6 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-                                                <div class="float-end">
-                                                    <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Ziek melden voor vandaag</a>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -445,6 +444,271 @@
 
                             </div>
                             <!--end::Row-->
+                            @else
+                                <!--begin::Row-->
+                                <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+                                    <!--begin::Col-->
+                                    <div class="col-xxl-6">
+                                        <!--begin::Chart widget 22-->
+                                        <div class="card rounded h-xl-100">
+                                            <!--begin::Header-->
+                                            <div class="card-header position-relative py-0 border-bottom-2">
+                                                <!--begin::Nav-->
+                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
+                                                    <!--begin::Item-->
+                                                    <li class="nav-item p-0 ms-0 me-8">
+                                                        <!--begin::Link-->
+                                                        <a class="nav-link btn btn-color-dark px-0">
+                                                            <!--begin::Subtitle-->
+                                                            <span class="nav-text fw-semibold fs-4 mb-3">Overzicht</span>
+                                                            <!--end::Subtitle-->
+                                                            <!--begin::Bullet-->
+                                                            <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
+                                                            <!--end::Bullet-->
+                                                        </a>
+                                                        <!--end::Link-->
+                                                    </li>
+                                                    <!--end::Item-->
+                                                </ul>
+                                                <!--end::Nav-->
+                                            </div>
+                                            <!--end::Header-->
+
+
+
+                                            <!--begin::Body-->
+                                            <div class="card-body pb-3">
+                                                <!--begin::Tab Content-->
+                                                <div class="tab-content">
+                                                    <!--begin::Tap pane-->
+                                                    <div class="tab-pane fade show active" id="kt_chart_widgets_22_tab_content_1">
+                                                        <!--begin::Wrapper-->
+                                                        <div class="d-flex flex-wrap flex-md-nowrap">
+                                                            <!--begin::Items-->
+                                                            <div class="me-md-5 w-100">
+                                                                <!--begin::Item-->
+                                                                <div class="d-flex border border-gray-300 border-dashed rounded p-6 mb-6">
+                                                                    <!--begin::Block-->
+                                                                    <div class="d-flex align-items-center flex-grow-1 me-2 me-sm-5">
+                                                                        <!--begin::Symbol-->
+                                                                        <div class="symbol symbol-50px me-4">
+                                                            <span class="symbol-label">
+                                                            <i class="ki-outline ki-file fs-2qx text-primary"></i>
+                                                            </span>
+                                                                        </div>
+                                                                        <!--end::Symbol-->
+                                                                        <!--begin::Section-->
+                                                                        <div class="me-2">
+                                                                            <a href="#" class="text-gray-800 text-hover-primary fs-6 fw-bold">Gemaakte werkstukken</a>
+                                                                            <span class="text-gray-400 fw-bold d-block fs-7">All-time</span>
+                                                                        </div>
+                                                                        <!--end::Section-->
+                                                                    </div>
+                                                                    <!--end::Block-->
+                                                                    <!--begin::Info-->
+                                                                    <div class="d-flex align-items-center">
+                                                                        <span class="text-dark fw-bolder fs-2x">{{ $werkstukCount }}</span>
+                                                                    </div>
+                                                                    <!--end::Info-->
+                                                                </div>
+                                                                <!--end::Item-->
+                                                                <!--begin::Item-->
+                                                                <div class="d-flex border border-gray-300 border-dashed rounded p-6 mb-6">
+                                                                    <!--begin::Block-->
+                                                                    <div class="d-flex align-items-center flex-grow-1 me-2 me-sm-5">
+                                                                        <!--begin::Symbol-->
+                                                                        <div class="symbol symbol-50px me-4">
+                                                            <span class="symbol-label">
+                                                            <i class="ki-outline ki-cheque fs-2qx text-primary"></i>
+                                                            </span>
+                                                                        </div>
+                                                                        <!--end::Symbol-->
+                                                                        <!--begin::Section-->
+                                                                        <div class="me-2">
+                                                                            <a href="#" class="text-gray-800 text-hover-primary fs-6 fw-bold">Huiswerk</a>
+                                                                            <span class="text-gray-400 fw-bold d-block fs-7">Deze week</span>
+                                                                        </div>
+                                                                        <!--end::Section-->
+                                                                    </div>
+                                                                    <!--end::Block-->
+                                                                    <!--begin::Info-->
+                                                                    <div class="d-flex align-items-center">
+                                                                        <span class="text-dark fw-bolder fs-2x">{{ $huiswerkCount }}</span>
+                                                                    </div>
+                                                                    <!--end::Info-->
+                                                                </div>
+                                                                <!--end::Item-->
+                                                            </div>
+                                                            <!--end::Items-->
+                                                        </div>
+                                                        <!--end::Wrapper-->
+                                                    </div>
+                                                    <!--end::Tap pane-->
+                                                </div>
+                                                <!--end::Tab Content-->
+                                            </div>
+                                            <!--end: Card Body-->
+                                        </div>
+                                        <!--end::Chart widget 22-->
+                                    </div>
+                                    <!--end::Col-->
+                                    <!--begin::Col-->
+                                    <div class="col-xxl-6">
+                                        <!--begin::Timeline widget 2-->
+                                        <div class="card rounded h-xl-100" id="kt_timeline_widget_2_card">
+                                            <!--begin::Header-->
+                                            <div class="card-header position-relative py-0 border-bottom-2">
+                                                <!--begin::Nav-->
+                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
+                                                    <!--begin::Item-->
+                                                    <li class="nav-item p-0 ms-0 me-8">
+                                                        <!--begin::Link-->
+                                                        <a class="nav-link btn btn-color-dark px-0">
+                                                            <!--begin::Subtitle-->
+                                                            <span class="nav-text fw-semibold fs-4 mb-3">Mijn Werkstukken</span>
+                                                            <!--end::Subtitle-->
+                                                            <!--begin::Bullet-->
+                                                            <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
+                                                            <!--end::Bullet-->
+                                                        </a>
+                                                        <!--end::Link-->
+                                                    </li>
+                                                    <!--end::Item-->
+                                                </ul>
+                                                <!--end::Nav-->
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body d-flex flex-column justify-content-between">
+                                                <div class="table-responsive mb-4">
+                                                    <table class="table align-middle gs-0 gy-4">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="p-0 w-10px"></th>
+                                                            <th class="p-0 min-w-400px"></th>
+                                                            <th class="p-0 min-w-100px"></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @forelse ($werkstukken->take(2) as $index => $werkstuk)
+                                                            @php
+                                                                // Bepaal de kleur op basis van het niveau
+                                                                switch($werkstuk->niveau) {
+                                                                    case 'Makkelijk':
+                                                                        $niveauColor = 'badge-light-success'; // Groene badge voor makkelijk niveau
+                                                                        break;
+                                                                    case 'Gemiddeld':
+                                                                        $niveauColor = 'badge-light-warning'; // Gele badge voor gemiddeld niveau
+                                                                        break;
+                                                                    case 'Moeilijk':
+                                                                        $niveauColor = 'badge-light-danger'; // Rode badge voor moeilijk niveau
+                                                                        break;
+                                                                    default:
+                                                                        $niveauColor = 'badge-light-secondary'; // Grijze badge voor onbekend niveau
+                                                                }
+
+                                                                // Bepaal de kleur op basis van het vak
+switch($werkstuk->vak) {
+    case 'Wiskunde':
+        $vakColor = 'bg-info'; // Blauwe bullet voor Wiskunde
+        break;
+    case 'Biologie':
+        $vakColor = 'bg-success'; // Groene bullet voor Biologie
+        break;
+    case 'Nederlands':
+        $vakColor = 'bg-warning'; // Gele bullet voor Nederlands
+        break;
+    case 'NASK':
+        $vakColor = 'bg-danger'; // Rode bullet voor Natuur- & Scheikunde
+        break;
+    case 'Geschiedenis':
+        $vakColor = 'bg-danger'; // Rode bullet voor Geschiedenis
+        break;
+    case 'Engels':
+        $vakColor = 'bg-primary'; // Donkerblauwe bullet voor Engels
+        break;
+    case 'Economie':
+        $vakColor = 'bg-secondary'; // Grijze bullet voor Economie
+        break;
+    case 'Aardrijkskunde':
+        $vakColor = 'bg-success'; // Groene bullet voor Aardrijkskunde
+        break;
+    case 'K&C':
+        $vakColor = 'bg-info'; // Blauwe bullet voor Kunst & Cultuur
+        break;
+    case 'Maatschappijleer':
+        $vakColor = 'bg-warning'; // Gele bullet voor Maatschappijleer
+        break;
+    case 'Informatica':
+        $vakColor = 'bg-dark'; // Zwarte bullet voor Informatica
+        break;
+    case 'Filosofie':
+        $vakColor = 'bg-light'; // Lichtgrijze bullet voor Filosofie
+        break;
+    case 'L&G':
+        $vakColor = 'bg-primary'; // Donkerblauwe bullet voor Klassieke Talen (Latijn & Grieks)
+        break;
+    case 'Muziek':
+        $vakColor = 'bg-success'; // Groene bullet voor Muziek
+        break;
+    case 'Techniek':
+        $vakColor = 'bg-secondary'; // Grijze bullet voor Handvaardigheid & Techniek
+        break;
+    case 'Godsdienst/Levensbeschouwing':
+        $vakColor = 'bg-danger'; // Rode bullet voor Godsdienst/Levensbeschouwing
+        break;
+    case 'Frans':
+        $vakColor = 'bg-info'; // Blauwe bullet voor Frans
+        break;
+    case 'Duits':
+        $vakColor = 'bg-warning'; // Gele bullet voor Duits
+        break;
+    case 'Spaans':
+        $vakColor = 'bg-danger'; // Rode bullet voor Spaans
+        break;
+    default:
+        $vakColor = 'bg-secondary'; // Grijze bullet voor onbekend vak
+}
+                                                            @endphp
+                                                            <tr>
+                                                                <td>
+                                                                    <span data-kt-element="bullet" class="bullet bullet-vertical d-flex align-items-center h-40px {{ $vakColor }}"></span>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">{{ $werkstuk->title }}</a>
+                                                                    <span class="text-gray-400 fw-bold fs-7 d-block">{{ $werkstuk->vak }}</span>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <span data-kt-element="status" class="badge {{ $niveauColor }}">{{ $werkstuk->niveau }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="3" class="text-center text-gray-500">Er zijn geen werkstukken beschikbaar.</td>
+                                                            </tr>
+                                                        @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                @if ($werkstukken->count() > 2)
+                                                    <p class="text-muted mt-auto mb-0">Staat je werkstuk er niet tussen? Klik <a href="{{ route('dashboard.project.index') }}" class="text-primary fw-semibold">hier</a> om een volledig overzicht te krijgen van al je ingediende werkstukken en projecten.</p>
+                                                @endif
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!--end::Tables Widget 2-->
+                                    </div>
+                                    <!--end::Col-->
+
+
+
+
+                                </div>
+                                <!--end::Row-->
+                            @endif
+
+
+
                         </div>
                         <!--end::Content-->
                     </div>
