@@ -297,7 +297,7 @@
                                                         </tr>
                                                     @empty
                                                         <tr>
-                                                            <td colspan="3" class="text-center text-gray-500">Er zijn geen cijfers beschikbaar.</td>
+                                                            <td colspan="3" class="text-center text-gray-500">Je hebt nog geen cijfers behaald.</td>
                                                         </tr>
                                                     @endforelse
                                                     </tbody>
