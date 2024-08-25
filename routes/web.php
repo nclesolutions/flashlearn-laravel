@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
     Route::get('/cijfers/view/{vak}', [GradesController::class, 'view'])->name('dashboard.grades.view');
 
     Route::get('/vakken', [SubjectController::class, 'index'])->name('dashboard.subjects.index');
+    Route::get('/vak/bekijk/{vak}', [SubjectController::class, 'view'])->name('dashboard.subjects.view');
 
     Route::get('/account/profiel', [ProfileController::class, 'index'])->name('profile.index');
 

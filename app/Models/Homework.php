@@ -19,5 +19,9 @@ class Homework extends Model
         'inlever_date'  // Correct field name for due date
     ];
 
-    // Assuming the columns in your database match these field names.
+    // Relatie met het Subject
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }

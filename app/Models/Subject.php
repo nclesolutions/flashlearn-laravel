@@ -13,4 +13,9 @@ class Subject extends Model
     {
         return $this->belongsTo(Teacher::class, 'docent_id', 'id');
     }
+    // Relatie met de Homework-opdrachten op basis van de 'vak' kolom
+    public function homework()
+    {
+        return $this->hasMany(Homework::class, 'vak', 'vak_naam');
+    }
 }

@@ -91,14 +91,14 @@
                                         <div class="card-header pt-7" id="kt_contacts_list_header">
                                             <form class="d-flex align-items-center position-relative w-100 m-0" autocomplete="off">
                                                 <i class="ki-outline ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"></i>
-                                                <input type="text" class="form-control form-control-solid ps-13" name="search" value="" placeholder="Zoeken in cijfers" />
+                                                <input type="text" class="form-control form-control-solid ps-13" name="search" value="" placeholder="Zoeken in vakken" />
                                             </form>
                                         </div>
                                         <div class="card-body pt-5" id="kt_contacts_list_body">
                                             <div class="scroll-y me-n5 pe-5 h-300px h-xl-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_contacts_list_header" data-kt-scroll-wrappers="#kt_content, #kt_contacts_list_body" data-kt-scroll-stretch="#kt_contacts_list, #kt_contacts_main" data-kt-scroll-offset="5px">
                                                 @if ($subjects->isEmpty())
                                                     <div class="text-center py-5">
-                                                        <p class="text-gray-400 fs-4 fw-semibold mb-2">Geen cijfers beschikbaar.</p>
+                                                        <p class="text-gray-400 fs-4 fw-semibold mb-2">Geen vakken beschikbaar.</p>
                                                         <img class="mw-100 mh-300px" alt="" src="{{ asset('assets/media/illustrations/sketchy-1/5.png') }}" />
                                                     </div>
                                                 @endif
@@ -110,7 +110,7 @@
                                                                 <div class="fw-semibold fs-7 text-muted">    @if($subject->teacher && $subject->teacher->user)
                                                                         {{ substr($subject->teacher->user->firstname, 0,1) }}. {{ $subject->teacher->user->lastname }}
                                                                     @else
-                                                                        No Teacher Assigned
+                                                                        Geen vaste leraar
                                                                     @endif</div>
                                                             </div>
                                                         </div>
