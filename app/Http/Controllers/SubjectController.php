@@ -5,6 +5,7 @@ use App\Models\Rooster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
+use App\Models\Teacher;
 
 class SubjectController extends Controller
 {
@@ -49,21 +50,29 @@ class SubjectController extends Controller
         // Haal het rooster van de gebruiker op
         $rooster = Rooster::where('user_id', $userId)->first();
 
-        // Veronderstel dat het rooster opgeslagen is in een JSON-formaat zoals het voorbeeld dat je gaf
-        $roosterData = json_decode($rooster->roosters, true);
+        if ($rooster) {
+            $roosterData = json_decode($rooster->roosters, true);
 
-        // Filter de lessen van het geselecteerde vak voor de huidige week
-        $filteredLessons = [];
-        foreach ($roosterData['weeks'] as $week) {
-            if ($week['week_number'] == $currentWeek) {
-                foreach ($week['days'] as $day) {
-                    foreach ($day['schedule'] as $lesson) {
-                        if (strtolower($lesson['lesson']) == strtolower($vak)) {
-                            $filteredLessons[$day['day_of_week']][] = $lesson;
+            // Filter de lessen van het geselecteerde vak voor de huidige week en vervang de teacher ID door de naam
+            $filteredLessons = [];
+            foreach ($roosterData['weeks'] as $week) {
+                if ($week['week_number'] == $currentWeek) {
+                    foreach ($week['days'] as $day) {
+                        foreach ($day['schedule'] as $lesson) {
+                            if (strtolower($lesson['lesson']) == strtolower($vak)) {
+                                // Vervang de 'teacher' ID door de bijbehorende naam
+                                $teacher = Teacher::with('user')->find($lesson['teacher']);
+                                if ($teacher && $teacher->user) {
+                                    $lesson['teacher'] = strtoupper(substr($teacher->user->firstname, 0, 1)) . '. ' . $teacher->user->lastname;
+                                }
+                                $filteredLessons[$day['day_of_week']][] = $lesson;
+                            }
                         }
                     }
                 }
             }
+        } else {
+            $filteredLessons = [];
         }
 
         // Maak een array voor de dagen van de week (Maandag t/m Vrijdag)
@@ -72,5 +81,4 @@ class SubjectController extends Controller
         // Stuur het geselecteerde vak, gefilterde lessen, en de dagen door naar de view
         return view('dashboard.subjects.view', compact('selectedSubject', 'filteredLessons', 'dagen', 'subjects'));
     }
-
 }

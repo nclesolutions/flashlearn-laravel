@@ -315,7 +315,6 @@
                                                                                 <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">{{ $les['lesson'] }}</a>
                                                                                 <div class="text-gray-500">Geleid door: <a href="#">{{ $les['teacher'] }}</a></div>
                                                                             </div>
-                                                                            <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">Bekijk</a>
                                                                         </div>
                                                                     @endforeach
                                                                 @else
