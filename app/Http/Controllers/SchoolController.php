@@ -8,12 +8,11 @@ class SchoolController extends Controller
 {
     public function index()
     {
-
+        // User ID
         $userId = auth()->user()->id;
 
         setlocale(LC_TIME, 'nl_NL.UTF-8');
         \Carbon\Carbon::setLocale('nl');
-
 
         // Haal de org_id (school_id) van de gebruiker op
         $userSchoolId = DB::table('students')
