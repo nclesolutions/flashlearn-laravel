@@ -43,4 +43,34 @@ class ProfileController extends Controller
             'schoolInfo' => $schoolInfo,
         ]);
     }
+
+    // API Endpoint: Haal profielgegevens op voor de ingelogde gebruiker
+    public function APIIndex()
+    {
+        // Zorg ervoor dat de gebruiker is geauthenticeerd
+        $account = Auth::user();
+
+        // Haal de biografie van de gebruiker op
+        $biography = DB::table('users')
+            ->where('id', $account->id)
+            ->value('biography');
+
+        // Haal de org_id (school_id) van de gebruiker op
+        $userSchoolId = DB::table('students')
+            ->where('user_id', $account->id)
+            ->value('org_id');
+
+        // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
+        $schoolInfo = null;
+        if ($userSchoolId) {
+            $schoolInfo = DB::table('schools')
+                ->where('org_id', $userSchoolId)
+                ->first();
+        }
+
+        // Return de gegevens in JSON-formaat
+        return response()->json([
+            'account' => $account,
+        ]);
+    }
 }

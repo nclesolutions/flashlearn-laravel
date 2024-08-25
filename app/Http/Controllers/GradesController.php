@@ -37,6 +37,7 @@ class GradesController extends Controller
     public function view($vak)
     {
         $userId = Auth::id();
+        $schoolId = session('org_id');
 
         // Fetch grades for the selected subject
         $grades = DB::table('grades AS cijfers')
@@ -64,6 +65,4 @@ class GradesController extends Controller
 
         return view('dashboard.grades.view', compact('grades', 'vak', 'subjects', 'averageGrades'));
     }
-
-
 }

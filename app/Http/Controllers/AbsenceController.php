@@ -49,4 +49,53 @@ class AbsenceController extends Controller
 
         return view('dashboard.absence.view', compact('absence', 'groupedResults'));
     }
+
+    // API Endpoint: Haal alle afwezigheden op voor de ingelogde gebruiker
+    public function APIIndex()
+    {
+        $userId = Auth::id();
+
+        // Set Carbon locale to Dutch
+        Carbon::setLocale('nl');
+
+        // Haal de afwezigheden van de gebruiker op uit de database en groepeer ze op datum
+        $absences = Absence::where('user_id', $userId)
+            ->orderBy('gemaakt_date', 'asc')
+            ->get()
+            ->groupBy(function($absence) {
+                // Formatteer de datum in het Nederlands zonder spaties, bijvoorbeeld "02_Februari_2024"
+                return Carbon::parse($absence->gemaakt_date)->translatedFormat('d_F_Y');
+            });
+
+        return response()->json([
+            'absences' => $absences,
+        ]);
+    }
+
+    // API Endpoint: Haal een specifieke afwezigheid op basis van ID
+    public function APIView($id)
+    {
+        $userId = Auth::id();
+
+        // Set Carbon locale to Dutch
+        Carbon::setLocale('nl');
+
+        // Haal de afwezigheid op basis van unieke ID en gebruiker-ID
+        $absence = Absence::where('unique_id', $id)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+
+        // Haal alle afwezigheden op voor deze gebruiker
+        $absences = Absence::where('user_id', $userId)->orderBy('gemaakt_date', 'asc')->get();
+
+        // Groepeer afwezigheden per 'gemaakt_date' met Nederlands geformatteerde data zonder spaties
+        $groupedResults = $absences->groupBy(function ($absence) {
+            return Carbon::parse($absence->gemaakt_date)->translatedFormat('d_F_Y');
+        });
+
+        return response()->json([
+            'absence' => $absence,
+        ]);
+    }
+
 }

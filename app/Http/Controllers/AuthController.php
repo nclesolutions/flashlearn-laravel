@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Mail\LoginNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -145,16 +147,16 @@ class AuthController extends Controller
         $user = User::where('email', $request->input('email'))->first();
 
         if ($user) {
-            // Manually create the password reset token
-            $token = Str::random(60);
+            // Gebruik de standaard Laravel methode om een token te genereren en op te slaan
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
 
-            // Store the token in the password_resets table
-            Password::getRepository()->create($user);
+            if ($status === Password::RESET_LINK_SENT) {
+                return back()->with(['status' => __($status)]);
+            }
 
-            // Send the custom password reset notification
-            $user->sendPasswordResetNotification($token);
-
-            return back()->with(['status' => __('passwords.sent')]);
+            return back()->withErrors(['email' => __($status)]);
         } else {
             return back()->withErrors(['email' => __('We can\'t find a user with that email address.')]);
         }
@@ -210,4 +212,48 @@ class AuthController extends Controller
     {
         return view('auth.maintenance');
     }
+
+
+    public function APILogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            // Fout afhandeling met een custom 'path' parameter
+            return response()->json([
+                'message' => 'The provided credentials are incorrect.',
+                'path' => '/error' // Hier kun je het pad aangeven waar de frontend naartoe moet navigeren
+            ], 401);
+        }
+
+        $user = Auth::user();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
+    }
+
+    public function APIshow(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'id' => $user->id,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'username' => $user->username,
+            'email' => $user->email,
+            'email_verified_at' => $user->email_verified_at,
+            'biography' => $user->biography,
+            'activation_code' => $user->activation_code,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]);
+    }
+
 }

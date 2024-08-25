@@ -155,4 +155,139 @@ class ProjectController extends Controller
         return view('dashboard.project.create');
     }
 
+
+    // API Endpoint: Haal alle werkstukken op, eventueel gefilterd op vak
+    // API Endpoint: Haal alle werkstukken op, eventueel gefilterd op vak
+    public function APIIndex(Request $request)
+    {
+        // Haal het vak-filter op uit het verzoek, standaard 'all'
+        $vak = $request->input('vak', 'all');
+
+        // Query om alle werkstukken op te halen, eventueel gefilterd op vak
+        if ($vak == 'all') {
+            $werkstukken = DB::table('projects')->get();
+        } else {
+            $werkstukken = DB::table('projects')->where('vak', $vak)->get();
+        }
+
+        // Verwijder de eigenaar-id en andere gebruikersgegevens voor elke werkstuk
+        $werkstukken->transform(function ($werkstuk) {
+            unset($werkstuk->owner_id);
+            return $werkstuk;
+        });
+
+        return response()->json([
+            'werkstukken' => $werkstukken,
+            'vak' => $vak,
+        ]);
+    }
+
+    // API Endpoint: Haal een specifiek werkstuk op basis van ID
+    public function APIView($id)
+    {
+        // Haal het werkstuk op basis van de unieke ID
+        $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
+
+        if (!$werkstuk) {
+            return response()->json(['error' => 'Werkstuk niet gevonden'], 404);
+        }
+
+        // Verwijder de eigenaar-id en andere gebruikersgegevens
+        unset($werkstuk->owner_id);
+
+        return response()->json([
+            'werkstuk' => $werkstuk,
+        ]);
+    }
+
+    // API Endpoint: Verwijder een werkstuk
+    public function APIDestroy($id)
+    {
+        // Haal het werkstuk op basis van de unieke ID
+        $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
+
+        // Controleer of het werkstuk bestaat en of de huidige gebruiker de eigenaar is
+        if ($werkstuk && $werkstuk->owner_id == Auth::id()) {
+            DB::table('projects')->where('unique_id', $id)->delete();
+            return response()->json(['success' => 'Werkstuk succesvol verwijderd.']);
+        }
+
+        return response()->json(['error' => 'Werkstuk niet gevonden of je hebt geen rechten om dit werkstuk te verwijderen.'], 403);
+    }
+
+    // API Endpoint: Maak een nieuw werkstuk aan
+    public function APIStore(Request $request)
+    {
+        // Valideer de binnenkomende gegevens
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'niveau' => 'required|string|max:255',
+            'vak' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        // Maak een nieuw werkstuk aan
+        $werkstuk = new Werkstuk();
+        $werkstuk->title = $request->input('title');
+        $werkstuk->niveau = $request->input('niveau');
+        $werkstuk->vak = $request->input('vak');
+        $werkstuk->content = $request->input('content');
+        $werkstuk->owner_id = Auth::id(); // Huidige ingelogde gebruiker als eigenaar
+        $werkstuk->unique_id = Str::uuid(); // Genereer een unieke ID
+
+        // Sla het werkstuk op in de database
+        $werkstuk->save();
+
+        // Verwijder de eigenaar-id en andere gebruikersgegevens voordat de response wordt gegeven
+        unset($werkstuk->owner_id);
+
+        return response()->json(['success' => 'Werkstuk succesvol aangemaakt.', 'werkstuk' => $werkstuk], 201);
+    }
+
+    // API Endpoint: Werk een bestaand werkstuk bij
+    public function APIUpdate(Request $request, $id)
+    {
+        // Valideer de binnenkomende gegevens
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'niveau' => 'required|string|max:255',
+            'vak' => 'required|string|max:255',
+            'editor' => 'required|string',
+        ]);
+
+        // Update het werkstuk
+        $werkstuk = DB::table('projects')
+            ->where('unique_id', $id)
+            ->first();
+
+        if (!$werkstuk || $werkstuk->owner_id !== Auth::id()) {
+            return response()->json(['error' => 'Werkstuk niet gevonden of je hebt geen rechten om dit werkstuk bij te werken.'], 403);
+        }
+
+        DB::table('projects')
+            ->where('unique_id', $id)
+            ->update([
+                'title' => $request->title,
+                'niveau' => $request->niveau,
+                'vak' => $request->vak,
+                'content' => $request->editor,
+            ]);
+
+        return response()->json(['success' => 'Werkstuk succesvol bijgewerkt.']);
+    }
+
+    // API Endpoint: Haal beschikbare vakken op
+    public function APIAvailableVakken()
+    {
+        // Haal alle unieke vakken op
+        $availableVakken = DB::table('projects')
+            ->select('vak')
+            ->groupBy('vak')
+            ->havingRaw('COUNT(*) > 0')
+            ->pluck('vak')
+            ->toArray();
+
+        return response()->json(['vakken' => $availableVakken]);
+    }
+
 }
