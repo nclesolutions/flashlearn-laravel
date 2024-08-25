@@ -39,6 +39,12 @@
                                 <span class="menu-arrow d-lg-none"></span>
                             </a>
                         </div>
+                        <div class="{{ checkActivePage(['vakken', 'vak/*']) }} menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
+                            <a class="menu-link" href="{{ url('/vakken') }}">
+                                <span class="menu-title">Vakken</span>
+                                <span class="menu-arrow d-lg-none"></span>
+                            </a>
+                        </div>
                     @endif
                     <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class=" {{ checkActivePage(['werkstuk', 'werkstuk/*']) }} menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                   <span class="menu-link">
