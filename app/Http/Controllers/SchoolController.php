@@ -29,33 +29,33 @@ class SchoolController extends Controller
         }
 
         // Haal school-specifieke nieuwsbrieven op, gesorteerd op created_at en beperkt tot 1
-        $schoolNewsletters = DB::table('newsletters')
-            ->join('users', 'newsletters.creator', '=', 'users.id') // Verbind de creator met de user tabel
+        $schoolnewsletter = DB::table('newsletter')
+            ->join('users', 'newsletter.creator', '=', 'users.id') // Verbind de creator met de user tabel
             ->where('school_id', $userSchoolId)
             ->orderBy('created_at', 'desc')
             ->limit(1)
-            ->select('newsletters.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
+            ->select('newsletter.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
             ->get();
 
         // Haal algemene nieuwsbrieven op (school_id is NULL), gesorteerd op created_at en beperkt tot 3
-        $generalNewsletters = DB::table('newsletters')
-            ->join('users', 'newsletters.creator', '=', 'users.id') // Verbind de creator met de user tabel
+        $generalnewsletter = DB::table('newsletter')
+            ->join('users', 'newsletter.creator', '=', 'users.id') // Verbind de creator met de user tabel
             ->whereNull('school_id')
             ->orderBy('created_at', 'desc')
             ->limit(3)
-            ->select('newsletters.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
+            ->select('newsletter.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
             ->get();
 
         // Combineer school-specifieke en algemene nieuwsbrieven
         if (!$userSchoolId) {
-            $newsletters = $generalNewsletters;
+            $newsletter = $generalnewsletter;
         } else {
             // Combineer school-specifieke en algemene nieuwsbrieven, en haal er max 3 op
-            $newsletters = $schoolNewsletters->merge($generalNewsletters)->sortByDesc('created_at')->take(3);
+            $newsletter = $schoolnewsletter->merge($generalnewsletter)->sortByDesc('created_at')->take(3);
         }
 
         return view('dashboard.school.index', [
-            'newsletters' => $newsletters,
+            'newsletter' => $newsletter,
             'schoolInfo' => $schoolInfo
         ]);
     }

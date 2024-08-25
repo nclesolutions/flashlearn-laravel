@@ -232,12 +232,12 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @if($newsletters->isEmpty())
+                                                        @if($newsletter->isEmpty())
                                                             <tr>
                                                                 <td colspan="3" class="text-center text-gray-500">Er zijn geen nieuwsbrieven gevonden...</td>
                                                             </tr>
                                                         @else
-                                                            @foreach($newsletters as $newsletter)
+                                                            @foreach($newsletter as $newsletter)
                                                                 <tr>
                                                                     <td class="p-0">
                                                                         <!-- Optional: Add an icon or any other element here -->

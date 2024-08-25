@@ -54,94 +54,98 @@
         @include('includes.header')
 
 
-            <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
-                <div id="kt_app_toolbar" class="app-toolbar py-6">
-                    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex align-items-start">
-                        <div class="d-flex flex-column flex-row-fluid">
-                            <div class="d-flex align-items-center pt-1">
-                                <ul class="breadcrumb breadcrumb-separatorless fw-semibold">
-                                    <li class="breadcrumb-item text-white fw-bold lh-1">
-                                        <a href="/" class="text-white">
-                                            <i class="ki-outline ki-home text-gray-700 fs-6"></i>
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <i class="ki-outline ki-right fs-7 text-gray-700 mx-n1"></i>
-                                    </li>
-                                    <li class="breadcrumb-item text-white fw-bold lh-1">Cijfers</li>
-                                </ul>
-                            </div>
-                            <div class="d-flex flex-stack flex-wrap flex-lg-nowrap gap-4 gap-lg-10 pt-13 pb-6">
-                                <div class="page-title me-5">
-                                    <h1 class="page-heading d-flex text-white fw-bold fs-2 flex-column justify-content-center my-0">Cijfers
-                                        <span class="page-desc text-gray-700 fw-semibold fs-6 pt-3">Op deze pagina vind je al je cijfers!</span>
-                                    </h1>
-                                </div>
-                            </div>
+        <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+            <div id="kt_app_toolbar" class="app-toolbar py-6">
+                <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex align-items-start">
+                    <div class="d-flex flex-column flex-row-fluid">
+                        <div class="d-flex align-items-center pt-1">
+                            <ul class="breadcrumb breadcrumb-separatorless fw-semibold">
+                                <li class="breadcrumb-item text-white fw-bold lh-1">
+                                    <a href="/" class="text-white">
+                                        <i class="ki-outline ki-home text-gray-700 fs-6"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <i class="ki-outline ki-right fs-7 text-gray-700 mx-n1"></i>
+                                </li>
+                                <li class="breadcrumb-item text-white fw-bold lh-1">Vakken</li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-                <div class="app-container container-xxl">
-                    <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-                        <div class="d-flex flex-column flex-column-fluid">
-                            <div id="kt_app_content" class="app-content flex-column-fluid">
-                                <div class="row g-7">
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="card card-flush" id="kt_contacts_list">
-                                            <div class="card-header pt-7" id="kt_contacts_list_header">
-                                                <form class="d-flex align-items-center position-relative w-100 m-0" autocomplete="off">
-                                                    <i class="ki-outline ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"></i>
-                                                    <input type="text" class="form-control form-control-solid ps-13" name="search" value="" placeholder="Zoeken in cijfers" />
-                                                </form>
-                                            </div>
-                                            <div class="card-body pt-5" id="kt_contacts_list_body">
-                                                <div class="scroll-y me-n5 pe-5 h-300px h-xl-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_contacts_list_header" data-kt-scroll-wrappers="#kt_content, #kt_contacts_list_body" data-kt-scroll-stretch="#kt_contacts_list, #kt_contacts_main" data-kt-scroll-offset="5px">
-                                                    @if ($subjects->isEmpty())
-                                                        <div class="text-center py-5">
-                                                            <p class="text-gray-400 fs-4 fw-semibold mb-2">Geen cijfers beschikbaar.</p>
-                                                            <img class="mw-100 mh-300px" alt="" src="{{ asset('assets/media/illustrations/sketchy-1/5.png') }}" />
-                                                        </div>
-                                                    @endif
-                                                    @foreach ($subjects as $subject)
-                                                        <div class="d-flex flex-stack py-4">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="ms-4">
-                                                                    <a href="{{ url('/cijfers/view/' . $subject->vak_naam) }}" class="fs-6 fw-bold text-gray-900 text-hover-primary mb-2">{{ $subject->vak_naam }}</a>
-                                                                    <div class="fw-semibold fs-7 text-muted">Gemiddeld {{ number_format($averageGrades[$subject->vak_naam] ?? 0.0, 1) }}</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="separator separator-dashed d-none"></div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-8">
-                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
-                                            <div class="card-body p-0">
-                                                <div class="card-px text-center py-20 my-10">
-                                                    <h2 class="fs-2x fw-bold mb-10">Cijfers</h2>
-                                                    <p class="text-gray-400 fs-4 fw-semibold mb-10">Op deze pagina vind je al je cijfers van dit schooljaar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="d-flex flex-stack flex-wrap flex-lg-nowrap gap-4 gap-lg-10 pt-13 pb-6">
+                            <div class="page-title me-5">
+                                <h1 class="page-heading d-flex text-white fw-bold fs-2 flex-column justify-content-center my-0">Vakken
+                                    <span class="page-desc text-gray-700 fw-semibold fs-6 pt-3">Op deze pagina vind je al je vakken!</span>
+                                </h1>
                             </div>
-                            @include('includes.footer')
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
+            <div class="app-container container-xxl">
+                <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+                    <div class="d-flex flex-column flex-column-fluid">
+                        <div id="kt_app_content" class="app-content flex-column-fluid">
+                            <div class="row g-7">
+                                <div class="col-lg-6 col-xl-4">
+                                    <div class="card card-flush" id="kt_contacts_list">
+                                        <div class="card-header pt-7" id="kt_contacts_list_header">
+                                            <form class="d-flex align-items-center position-relative w-100 m-0" autocomplete="off">
+                                                <i class="ki-outline ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y"></i>
+                                                <input type="text" class="form-control form-control-solid ps-13" name="search" value="" placeholder="Zoeken in cijfers" />
+                                            </form>
+                                        </div>
+                                        <div class="card-body pt-5" id="kt_contacts_list_body">
+                                            <div class="scroll-y me-n5 pe-5 h-300px h-xl-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_contacts_list_header" data-kt-scroll-wrappers="#kt_content, #kt_contacts_list_body" data-kt-scroll-stretch="#kt_contacts_list, #kt_contacts_main" data-kt-scroll-offset="5px">
+                                                @if ($subjects->isEmpty())
+                                                    <div class="text-center py-5">
+                                                        <p class="text-gray-400 fs-4 fw-semibold mb-2">Geen cijfers beschikbaar.</p>
+                                                        <img class="mw-100 mh-300px" alt="" src="{{ asset('assets/media/illustrations/sketchy-1/5.png') }}" />
+                                                    </div>
+                                                @endif
+                                                @foreach ($subjects as $subject)
+                                                    <div class="d-flex flex-stack py-4">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="ms-4">
+                                                                <a href="{{ url('/vak/bekijk/' . $subject->vak_naam) }}" class="fs-6 fw-bold text-gray-900 text-hover-primary mb-2">{{ $subject->vak_naam }}</a>
+                                                                <div class="fw-semibold fs-7 text-muted">    @if($subject->teacher && $subject->teacher->user)
+                                                                        {{ substr($subject->teacher->user->firstname, 0,1) }}. {{ $subject->teacher->user->lastname }}
+                                                                    @else
+                                                                        No Teacher Assigned
+                                                                    @endif</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="separator separator-dashed d-none"></div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-8">
+                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                        <div class="card-body p-0">
+                                            <div class="card-px text-center py-20 my-10">
+                                                <h2 class="fs-2x fw-bold mb-10">Vakken</h2>
+                                                <p class="text-gray-400 fs-4 fw-semibold mb-10">Op deze pagina vind je al je vakken.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @include('includes.footer')
+                    </div>
+                </div>
+            </div>
         </div>
-        <!--end::Wrapper-->
+
+
+
+
     </div>
-    <!--end::Page-->
+    <!--end::Wrapper-->
+</div>
+<!--end::Page-->
 </div>
 <!--end::App-->
 <!--begin::Scrolltop-->

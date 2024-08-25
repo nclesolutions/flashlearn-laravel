@@ -5,8 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GradesController;
 use App\Http\Controllers\HomeworkController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Middleware\CheckUserActivation;
 use App\Http\Middleware\CheckUserMembership;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +29,8 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
     // Grades Routes
     Route::get('/cijfers', [GradesController::class, 'index'])->name('dashboard.grades.index');
     Route::get('/cijfers/view/{vak}', [GradesController::class, 'view'])->name('dashboard.grades.view');
+
+    Route::get('/vakken', [SubjectController::class, 'index'])->name('dashboard.subjects.index');
 
     Route::get('/account/profiel', [ProfileController::class, 'index'])->name('profile.index');
 
