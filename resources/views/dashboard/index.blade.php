@@ -340,7 +340,7 @@
                                                     <div class="dropdown">
                                                         <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                             @if ($currentWeekRooster['week_number'] == date('W'))
-                                                                Huidige week
+                                                                Deze week
                                                             @else
                                                                 Week {{ $currentWeekRooster['week_number'] }}
                                                             @endif
