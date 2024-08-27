@@ -50,3 +50,5 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::middleware('auth:sanctum')->get('/school', [SchoolController::class, 'APIIndex']);
 Route::middleware('auth:sanctum')->get('/profile', [ProfileController::class, 'APIIndex']);
+Route::middleware('auth:sanctum')->get('/grades', [GradesController::class, 'APIIndex']);
+Route::middleware('auth:sanctum')->get('/user-projects', [ProjectController::class, 'APIUserProjects']);
