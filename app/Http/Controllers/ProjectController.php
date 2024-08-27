@@ -160,24 +160,24 @@ class ProjectController extends Controller
     // API Endpoint: Haal alle werkstukken op, eventueel gefilterd op vak
     public function APIIndex(Request $request)
     {
-        // Haal het vak-filter op uit het verzoek, standaard 'all'
+        // Retrieve the subject filter from the request, default to 'all'
         $vak = $request->input('vak', 'all');
 
-        // Query om alle werkstukken op te halen, eventueel gefilterd op vak
+        // Query to fetch all projects, optionally filtered by subject
         if ($vak == 'all') {
-            $werkstukken = DB::table('projects')->get();
+            $projects = DB::table('projects')->get();
         } else {
-            $werkstukken = DB::table('projects')->where('vak', $vak)->get();
+            $projects = DB::table('projects')->where('vak', $vak)->get();
         }
 
-        // Verwijder de eigenaar-id en andere gebruikersgegevens voor elke werkstuk
-        $werkstukken->transform(function ($werkstuk) {
-            unset($werkstuk->owner_id);
-            return $werkstuk;
+        // Remove sensitive data
+        $projects->transform(function ($project) {
+            unset($project->owner_id);
+            return $project;
         });
 
         return response()->json([
-            'werkstukken' => $werkstukken,
+            'projects' => $projects,
             'vak' => $vak,
         ]);
     }
@@ -288,6 +288,26 @@ class ProjectController extends Controller
             ->toArray();
 
         return response()->json(['vakken' => $availableVakken]);
+    }
+
+    public function APIUserProjects(Request $request)
+    {
+        // Get the currently authenticated user's ID
+        $userId = Auth::id();
+
+        // Fetch all projects associated with the logged-in user
+        $projects = DB::table('projects')->where('owner_id', $userId)->get();
+
+        // Optionally remove sensitive data
+        $projects->transform(function ($project) {
+            unset($project->owner_id); // Remove the owner ID if not needed
+            return $project;
+        });
+
+        return response()->json([
+            'user_id' => $userId,
+            'projects' => $projects,
+        ]);
     }
 
 }
