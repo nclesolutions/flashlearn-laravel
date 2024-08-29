@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -20,15 +19,20 @@ class GradesController extends Controller
             ->orderBy('gekregen_date', 'asc')
             ->get();
 
-        // Calculate the average grades for each subject
+        // Calculate the weighted average grades for each subject
         $averageGrades = [];
         foreach ($subjects as $subject) {
-            $average = DB::table('grades')
+            $grades = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
-                ->avg('grade');
+                ->get(['grade', 'weight']);
 
-            $averageGrades[$subject->vak_naam] = $average;
+            $totalWeight = $grades->sum('weight');
+            $weightedSum = $grades->sum(function($grade) {
+                return $grade->grade * $grade->weight;
+            });
+
+            $averageGrades[$subject->vak_naam] = $totalWeight > 0 ? $weightedSum / $totalWeight : null;
         }
 
         return view('dashboard.grades.index', compact('subjects', 'averageGrades'));
@@ -52,15 +56,20 @@ class GradesController extends Controller
             ->orderBy('gekregen_date', 'asc')
             ->get();
 
-        // Calculate the average grades for each subject
+        // Calculate the weighted average grades for each subject
         $averageGrades = [];
         foreach ($subjects as $subject) {
-            $average = DB::table('grades')
+            $grades = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
-                ->avg('grade');
+                ->get(['grade', 'weight', 'onderdeel', 'created_at']);
 
-            $averageGrades[$subject->vak_naam] = $average;
+            $totalWeight = $grades->sum('weight');
+            $weightedSum = $grades->sum(function($grade) {
+                return $grade->grade * $grade->weight;
+            });
+
+            $averageGrades[$subject->vak_naam] = $totalWeight > 0 ? $weightedSum / $totalWeight : null;
         }
 
         return view('dashboard.grades.view', compact('grades', 'vak', 'subjects', 'averageGrades'));
@@ -70,55 +79,45 @@ class GradesController extends Controller
     {
         // Get the logged-in user's ID
         $userId = Auth::id();
-
+    
         // Fetch the org_id (school_id) from the students table using the user ID
         $schoolId = DB::table('students')
             ->where('user_id', $userId)
             ->value('org_id');
-
-        // Log the userId and schoolId for debugging
-        \Log::info("User ID: {$userId}, School ID: {$schoolId}");
-
+    
         if (!$schoolId) {
             return response()->json(['error' => 'School ID not found for the user'], 404);
         }
-
-        // Fetch the subjects related to the user's school
+    
         $subjects = DB::table('subjects')
             ->where('school_id', $schoolId)
             ->orderBy('gekregen_date', 'asc')
             ->get();
-
-        // Log the number of subjects found
-        \Log::info("Subjects found: " . $subjects->count());
-
-        // Prepare an array to store grades data
+    
         $gradesData = [];
-
-        // Fetch grades for each subject
+    
+        // Fetch grades and calculate weighted averages for each subject
         foreach ($subjects as $subject) {
-            \Log::info("Fetching grades for subject: {$subject->vak_naam}, Subject ID: {$subject->id}");
-
             $grades = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
-                ->get();
-
-            // Log the number of grades found
-            \Log::info("Grades found for {$subject->vak_naam}: " . $grades->count());
-
-            // Store grades in the gradesData array
-            $gradesData[$subject->vak_naam] = $grades->toArray();
+                ->get(['grade', 'weight', 'onderdeel', 'created_at']); // Selecteer 'onderdeel' en 'created_at'
+    
+            $totalWeight = $grades->sum('weight');
+            $weightedSum = $grades->sum(function($grade) {
+                return $grade->grade * $grade->weight;
+            });
+    
+            $weightedAverage = $totalWeight > 0 ? $weightedSum / $totalWeight : null;
+    
+            // Store grades and the weighted average in the gradesData array
+            $gradesData[$subject->vak_naam] = [
+                'grades' => $grades->toArray(),
+                'weighted_average' => $weightedAverage
+            ];
         }
-
-        // Log the entire gradesData array for debugging
-        \Log::info("Grades Data: " . json_encode($gradesData));
-
-        // Return the grades data as JSON response
-        return response()->json([
-            'grades' => $gradesData
-        ]);
+    
+        return response()->json(['grades' => $gradesData]);
     }
-
-
+    
 }
