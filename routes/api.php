@@ -52,3 +52,4 @@ Route::middleware('auth:sanctum')->get('/school', [SchoolController::class, 'API
 Route::middleware('auth:sanctum')->get('/profile', [ProfileController::class, 'APIIndex']);
 Route::middleware('auth:sanctum')->get('/grades', [GradesController::class, 'APIIndex']);
 Route::middleware('auth:sanctum')->get('/user-projects', [ProjectController::class, 'APIUserProjects']);
+Route::middleware('auth:sanctum')->get('/subjects', [SubjectController::class, 'APIIndex']);
