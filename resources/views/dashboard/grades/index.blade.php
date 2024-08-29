@@ -107,7 +107,7 @@
                                                             <div class="d-flex align-items-center">
                                                                 <div class="ms-4">
                                                                     <a href="{{ url('/cijfers/view/' . $subject->vak_naam) }}" class="fs-6 fw-bold text-gray-900 text-hover-primary mb-2">{{ $subject->vak_naam }}</a>
-                                                                    <div class="fw-semibold fs-7 text-muted">Gemiddeld {{ number_format($averageGrades[$subject->vak_naam] ?? 0.0, 1) }}</div>
+                                                                    <div class="fw-semibold fs-7 text-muted">Gemiddeld (Gewogen): {{ number_format($averageGrades[$subject->vak_naam] ?? 0.0, 1) }}                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

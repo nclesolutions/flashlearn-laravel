@@ -95,7 +95,7 @@
                                     <button type="submit" class="btn btn-primary mt-3 d-block w-100">Inloggen</button>
                                 </div>
                             </div>
-                            <p class="font-monospace fw-medium text-center text-muted mt-3 pt-4 mb-0">Wachtwoord vergeten? <a href="#" class="text-decoration-none">Herstel het hier!</a> Of wil je een nieuw <a href="#" class="text-decoration-none">account aanmaken</a>?</p>
+                            <p class="font-monospace fw-medium text-center text-muted mt-3 pt-4 mb-0">Wachtwoord vergeten? <a href="/wachtwoord/vergeten" class="text-decoration-none">Herstel het hier!</a> Of wil je een nieuw <a href="/aanmelden" class="text-decoration-none">account aanmaken</a>?</p>
                         </form>
                     </div>
                 </div>

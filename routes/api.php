@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckUserActivation;
@@ -52,3 +53,4 @@ Route::middleware('auth:sanctum')->get('/school', [SchoolController::class, 'API
 Route::middleware('auth:sanctum')->get('/profile', [ProfileController::class, 'APIIndex']);
 Route::middleware('auth:sanctum')->get('/grades', [GradesController::class, 'APIIndex']);
 Route::middleware('auth:sanctum')->get('/user-projects', [ProjectController::class, 'APIUserProjects']);
+Route::middleware('auth:sanctum')->get('/subjects', [SubjectController::class, 'APIIndex']);

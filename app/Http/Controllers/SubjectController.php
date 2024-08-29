@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subject;
 use App\Models\Teacher;
+use Illuminate\Support\Facades\DB;
+
 
 class SubjectController extends Controller
 {
@@ -80,5 +82,34 @@ class SubjectController extends Controller
 
         // Stuur het geselecteerde vak, gefilterde lessen, en de dagen door naar de view
         return view('dashboard.subjects.view', compact('selectedSubject', 'filteredLessons', 'dagen', 'subjects'));
+    }
+
+    public function APIIndex()
+    {
+        // Haal het ID van de ingelogde leerling op
+        $userId = Auth::id();
+    
+        // Haal het school ID van de leerling op uit de database
+        $schoolId = DB::table('students')
+            ->where('user_id', $userId)
+            ->value('org_id');
+    
+        if (!$schoolId) {
+            return response()->json(['error' => 'School ID not found'], 404);
+        }
+    
+        // Haal alle vakken op die aan de school van de leerling zijn gekoppeld
+        $subjects = Subject::with(['teacher' => function ($query) {
+            $query->select('id', 'user_id', 'org_id', 'perm'); // Selecteer alleen de benodigde velden van teacher
+        }, 'teacher.user' => function ($query) {
+            $query->select('id', 'firstname', 'lastname'); // Selecteer alleen de benodigde velden van user
+        }])
+        ->where('school_id', $schoolId)
+        ->orderBy('gekregen_date', 'asc')
+        ->get(['id', 'school_id', 'docent_id', 'gekregen_date', 'vak_naam']); // Selecteer alleen de benodigde velden van subject
+
+    
+        // Return the subjects as a JSON response
+        return response()->json(['subjects' => $subjects]);
     }
 }
