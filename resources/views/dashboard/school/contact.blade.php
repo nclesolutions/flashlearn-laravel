@@ -106,58 +106,8 @@
                                 <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
                                     <!--begin::Col-->
                                     <div class="col-xxl-12">
-                                        <!--begin::Chart widget 22-->
-                                        <div class="card rounded h-xl-100">
-                                            <!--begin::Header-->
-                                            <div class="card-header position-relative py-0 border-bottom-2">
-                                                <!--begin::Nav-->
-                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
-                                                    <!--begin::Item-->
-                                                    <li class="nav-item p-0 ms-0 me-8">
-                                                        <!--begin::Link-->
-                                                        <a class="nav-link btn btn-color-dark px-0">
-                                                            <!--begin::Subtitle-->
-                                                            <span class="nav-text fw-semibold fs-4 mb-3">Mijn School</span>
-                                                            <!--end::Subtitle-->
-                                                            <!--begin::Bullet-->
-                                                            <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
-                                                            <!--end::Bullet-->
-                                                        </a>
-                                                        <!--end::Link-->
-                                                    </li>
-                                                    <!--end::Item-->
-                                                </ul>
-                                                <!--end::Nav-->
-                                            </div>
-                                            <!--end::Header-->
-
-
-
-                                            <!--begin::Body-->
-                                            <div class="card-body pb-3">
-                                                <!--begin::Tab Content-->
-                                                <div class="tab-content">
-                                                    <!--begin::Tap pane-->
-                                                    <div class="tab-pane fade show active" id="kt_chart_widgets_22_tab_content_1">
-                                                        <!--begin::Wrapper-->
-                                                        <div class="d-flex flex-wrap flex-md-nowrap">
-                                                            <!--begin::Items-->
-                                                            <div class="me-md-5 w-100">
-                                                            @include('Chatify::layouts.headLinks', ['id' => auth()->user()->id])
-
-                                                              
-                                                            </div>
-                                                            <!--end::Items-->
-                                                        </div>
-                                                        <!--end::Wrapper-->
-                                                    </div>
-                                                    <!--end::Tap pane-->
-                                                </div>
-                                                <!--end::Tab Content-->
-                                            </div>
-                                            <!--end: Card Body-->
-                                        </div>
-                                        <!--end::Chart widget 22-->
+                                    @include('Chatify::layouts.headLinks')
+                                    @include('vendor.Chatify.pages.app')
                                     </div>
                                     <!--end::Col-->
 

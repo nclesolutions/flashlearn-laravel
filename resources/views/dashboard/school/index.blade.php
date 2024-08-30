@@ -280,7 +280,7 @@
                                     <div class="py-0">
                                         <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
                                             <div class="col-md-4">
-                                                <a href="#" class="card rounded hover-elevate-up  parent-hover">
+                                                <a href="https://flashlearn.nl/chat" class="card rounded hover-elevate-up  parent-hover">
                                                     <div class="card-body d-flex align-items">
                                                         <i class="ki-duotone ki-rocket fs-1"><span class="path1"></span><span class="path2"></span></i>
                                                         <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">

@@ -10,8 +10,8 @@
             </td>
             {{-- center side --}}
             <td>
-                <p data-id="{{ Auth::user()->id }}" data-type="user">Saved Messages <span>You</span></p>
-                <span>Save messages secretly</span>
+                <p data-id="{{ Auth::user()->id }}" data-type="user">Opgeslagen berichten <span>Jij</span></p>
+                <span>Sla berichten op</span>
             </td>
         </tr>
     </table>
@@ -37,13 +37,13 @@ $lastMessageBody = strlen($lastMessageBody) > 30 ? mb_substr($lastMessageBody, 0
         {{-- center side --}}
         <td>
         <p data-id="{{ $user->id }}" data-type="user">
-            {{ strlen($user->username) > 12 ? trim(substr($user->username,0,12)).'..' : $user->username }}
-            <span class="contact-item-time" data-time="{{$lastMessage->created_at}}">{{ $lastMessage->timeAgo }}</span></p>
+        {{ strlen($user->firstname . ' ' . $user->lastname) > 22 ? trim(substr($user->firstname . ' ' . $user->lastname, 0, 12)).'..' : $user->firstname . ' ' . $user->lastname }}
+        <span class="contact-item-time" data-time="{{$lastMessage->created_at}}">{{ $lastMessage->timeAgo }}</span></p>
         <span>
             {{-- Last Message user indicator --}}
             {!!
                 $lastMessage->from_id == Auth::user()->id
-                ? '<span class="lastMessageIndicator">You :</span>'
+                ? '<span class="lastMessageIndicator">Jij:</span>'
                 : ''
             !!}
             {{-- Last message body --}}
@@ -52,7 +52,7 @@ $lastMessageBody = strlen($lastMessageBody) > 30 ? mb_substr($lastMessageBody, 0
                 $lastMessageBody
             !!}
             @else
-            <span class="fas fa-file"></span> Attachment
+            <span class="fas fa-file"></span> Bestand
             @endif
         </span>
         {{-- New messages counter --}}

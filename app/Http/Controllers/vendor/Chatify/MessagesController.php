@@ -221,19 +221,28 @@ class MessagesController extends Controller
     public function getContacts(Request $request)
     {
         // get all users that received/sent message from/to [Auth user]
-        $users = Message::join('users',  function ($join) {
+        $users = Message::join('users', function ($join) {
             $join->on('ch_messages.from_id', '=', 'users.id')
                 ->orOn('ch_messages.to_id', '=', 'users.id');
         })
+        ->join('students', 'users.id', '=', 'students.user_id')
+        ->join('schools', 'students.org_id', '=', 'schools.org_id')
         ->where(function ($q) {
             $q->where('ch_messages.from_id', Auth::user()->id)
-            ->orWhere('ch_messages.to_id', Auth::user()->id);
+                ->orWhere('ch_messages.to_id', Auth::user()->id);
         })
-        ->where('users.id','!=',Auth::user()->id)
-        ->select('users.*',DB::raw('MAX(ch_messages.created_at) max_created_at'))
+        ->where('users.id', '!=', Auth::user()->id)
+        ->whereExists(function ($query) {
+            $query->select(DB::raw(1))
+                ->from('students as s')
+                ->join('schools as sc', 's.org_id', '=', 'sc.org_id')
+                ->where('s.user_id', '=', Auth::user()->id)
+                ->whereColumn('sc.org_id', 'schools.org_id');
+        })
+        ->select('users.*', DB::raw('MAX(ch_messages.created_at) max_created_at'))
         ->orderBy('max_created_at', 'desc')
         ->groupBy('users.id')
-        ->paginate($request->per_page ?? $this->perPage);
+        ->paginate($request->per_page ?? $this->perPage);        
 
         $usersList = $users->items();
 
@@ -331,18 +340,44 @@ class MessagesController extends Controller
     {
         $getRecords = null;
         $input = trim(filter_var($request['input']));
-        $records = User::where('id','!=',Auth::user()->id)
-                    ->where('firstname', 'LIKE', "%{$input}%")
-                    ->paginate($request->per_page ?? $this->perPage);
+    
+        $records = User::where('id', '!=', Auth::user()->id)
+            ->where('firstname', 'LIKE', "%{$input}%")
+            ->where(function ($query) {
+                $query->whereExists(function ($subQuery) {
+                    $subQuery->select(DB::raw(1))
+                        ->from('students')
+                        ->whereColumn('students.user_id', 'users.id')
+                        ->whereIn('students.org_id', function ($innerQuery) {
+                            $innerQuery->select('students.org_id')
+                                ->from('students')
+                                ->where('students.user_id', Auth::user()->id);
+                        });
+                })
+                ->orWhereExists(function ($subQuery) {
+                    $subQuery->select(DB::raw(1))
+                        ->from('teachers')
+                        ->whereColumn('teachers.user_id', 'users.id')
+                        ->whereIn('teachers.org_id', function ($innerQuery) {
+                            $innerQuery->select('teachers.org_id')
+                                ->from('teachers')
+                                ->where('teachers.user_id', Auth::user()->id);
+                        });
+                });
+            })
+            ->paginate($request->per_page ?? $this->perPage);
+    
         foreach ($records->items() as $record) {
             $getRecords .= view('Chatify::layouts.listItem', [
                 'get' => 'search_item',
                 'user' => Chatify::getUserWithAvatar($record),
             ])->render();
         }
-        if($records->total() < 1){
+    
+        if ($records->total() < 1) {
             $getRecords = '<p class="message-hint center-el"><span>Nothing to show.</span></p>';
         }
+    
         // send the response
         return Response::json([
             'records' => $getRecords,
@@ -350,6 +385,8 @@ class MessagesController extends Controller
             'last_page' => $records->lastPage()
         ], 200);
     }
+    
+    
 
     /**
      * Get shared photos

@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
 
     // School Routes
     Route::get('/school', [SchoolController::class, 'index'])->name('school.index');
-    Route::get('/school/chat', [SchoolController::class, 'contact'])->name('school.contact');
+    Route::get('/schoolchat', [SchoolController::class, 'contact'])->name('school.contact');
 });
 
 Route::get('/inloggen', [AuthController::class, 'showLoginForm'])->name('login');

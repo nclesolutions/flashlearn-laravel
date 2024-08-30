@@ -1,11 +1,11 @@
 @include('Chatify::layouts.headLinks')
 <div class="messenger">
     {{-- ----------------------Users/Groups lists side---------------------- --}}
-    <div class="messenger-listView {{ !!$id ? 'conversation-active' : '' }}">
+    <div class="messenger-listView {{ !!Auth::user()->id ? 'conversation-active' : '' }}">
         {{-- Header and search bar --}}
         <div class="m-header">
             <nav>
-                <a href="#"><i class="fas fa-inbox"></i> <span class="messenger-headTitle">MESSAGES</span> </a>
+                <a href="/school"><span class="messenger-headTitle">FlashLearn Berichten</span> </a>
                 {{-- header buttons --}}
                 <nav class="m-header-right">
                     <a href="#"><i class="fas fa-cog settings-btn"></i></a>
@@ -13,11 +13,11 @@
                 </nav>
             </nav>
             {{-- Search input --}}
-            <input type="text" class="messenger-search" placeholder="Search" />
+            <input type="text" class="messenger-search" placeholder="Zoeken.." />
             {{-- Tabs --}}
             {{-- <div class="messenger-listView-tabs">
                 <a href="#" class="active-tab" data-view="users">
-                    <span class="far fa-user"></span> Contacts</a>
+                    <span class="far fa-user"></span> Contacten</a>
             </div> --}}
         </div>
         {{-- tabs and lists --}}
@@ -27,22 +27,22 @@
            <div class="show messenger-tab users-tab app-scroll" data-view="users">
                {{-- Favorites --}}
                <div class="favorites-section">
-                <p class="messenger-title"><span>Favorites</span></p>
+                <p class="messenger-title"><span>Favorieten</span></p>
                 <div class="messenger-favorites app-scroll-hidden"></div>
                </div>
                {{-- Saved Messages --}}
-               <p class="messenger-title"><span>Your Space</span></p>
+               <p class="messenger-title"><span>Mijn Omgeving</span></p>
                {!! view('Chatify::layouts.listItem', ['get' => 'saved']) !!}
                {{-- Contact --}}
-               <p class="messenger-title"><span>All Messages</span></p>
+               <p class="messenger-title"><span>Alle berichten</span></p>
                <div class="listOfContacts" style="width: 100%;height: calc(100% - 272px);position: relative;"></div>
            </div>
              {{-- ---------------- [ Search Tab ] ---------------- --}}
            <div class="messenger-tab search-tab app-scroll" data-view="search">
                 {{-- items --}}
-                <p class="messenger-title"><span>Search</span></p>
+                <p class="messenger-title"><span>Zoeken</span></p>
                 <div class="search-records">
-                    <p class="message-hint center-el"><span>Type to search..</span></p>
+                    <p class="message-hint center-el"><span>Typ om te zoeken..</span></p>
                 </div>
              </div>
         </div>
@@ -101,7 +101,7 @@
     <div class="messenger-infoView app-scroll">
         {{-- nav actions --}}
         <nav>
-            <p>User Details</p>
+            <p>Accountinformatie</p>
             <a href="#"><i class="fas fa-times"></i></a>
         </nav>
         {!! view('Chatify::layouts.info')->render() !!}
