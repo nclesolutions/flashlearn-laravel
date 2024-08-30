@@ -12,6 +12,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
+        "munafio/chatify": "^1.6",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('auth/img/favicon.png') }}" type="image/png" sizes="16x16">
-    <title>NCLE™ Solutions - Register</title>
+    <title>FlashLearn</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('auth/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('auth/css/custom.css') }}" rel="stylesheet">

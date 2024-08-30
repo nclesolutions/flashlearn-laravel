@@ -114,4 +114,34 @@ class SchoolController extends Controller
             'newsletter' => $newsletter,
         ]);
     }
+
+
+    public function contact()
+    {
+        // User ID
+        $userId = auth()->user()->id;
+
+        setlocale(LC_TIME, 'nl_NL.UTF-8');
+        \Carbon\Carbon::setLocale('nl');
+
+        // Haal de org_id (school_id) van de gebruiker op
+        $userSchoolId = DB::table('students')
+            ->where('user_id', $userId)
+            ->value('org_id');
+
+        // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
+        $schoolInfo = null;
+        if ($userSchoolId) {
+            $schoolInfo = DB::table('schools')
+                ->where('org_id', $userSchoolId)
+                ->first();
+        }
+
+        return view('dashboard.school.contact', [
+            'schoolInfo' => $schoolInfo
+        ]);
+    }
+
+
+
 }
