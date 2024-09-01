@@ -64,4 +64,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+    public function flashcards()
+    {
+        return $this->belongsToMany(Flashcard::class)
+                    ->withPivot('correct')
+                    ->withTimestamps();
+    }
+
+    public function addPoints($points)
+    {
+        $this->points += $points;
+        $this->save();
+    }
 }

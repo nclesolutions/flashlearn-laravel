@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\FlashcardController;
 use App\Http\Middleware\CheckUserActivation;
 use App\Http\Middleware\CheckUserMembership;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,25 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
     // School Routes
     Route::get('/school', [SchoolController::class, 'index'])->name('school.index');
     Route::get('/schoolchat', [SchoolController::class, 'contact'])->name('school.contact');
+
+
+    Route::get('/flashcards', [FlashcardController::class, 'index'])->name('dashboard.flashcards.index');
+
+    // Route om de pagina te tonen waar nieuwe flitskaarten kunnen worden aangemaakt
+    Route::get('/flashcards/create', [FlashcardController::class, 'create'])->name('dashboard.flashcards.create');
+
+    // Route om de nieuwe flitskaarten op te slaan
+    Route::post('/flashcards/store', [FlashcardController::class, 'store'])->name('dashboard.flashcards.store');
+
+    // Route om het leerproces van de flitskaarten voor een specifiek vak te starten
+    Route::get('/flashcards/start/{subject}', [FlashcardController::class, 'start'])->name('dashboard.flashcards.start');
+
+    // Route om een antwoord in te dienen en het resultaat van de vraag te tonen
+    Route::post('/flashcards/answer/{subject}', [FlashcardController::class, 'answer'])->name('dashboard.flashcards.answer');
+
+    // Route om de totaalresultaten te bekijken nadat alle flitskaarten zijn beantwoord
+    Route::get('/flashcards/result/{subject}', [FlashcardController::class, 'result'])->name('dashboard.flashcards.result');
+    
 });
 
 Route::get('/inloggen', [AuthController::class, 'showLoginForm'])->name('login');

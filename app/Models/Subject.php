@@ -18,4 +18,8 @@ class Subject extends Model
     {
         return $this->hasMany(Homework::class, 'vak', 'vak_naam');
     }
+    public function flashcards()
+    {
+        return $this->hasMany(Flashcard::class);
+    }
 }
