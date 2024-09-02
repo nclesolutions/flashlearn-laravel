@@ -94,7 +94,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
-Route::middleware(['auth', 'signed'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
     Route::post('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 });
