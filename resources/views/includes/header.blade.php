@@ -47,14 +47,14 @@
                         </div>
                     @endif
                     @if (session('orgName'))
-                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class=" {{ checkActivePage(['werkstuk', 'werkstuk/*']) }} menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                    <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class=" {{ checkActivePage(['werkstuk', 'flashcards', 'flashcards/*', 'werkstuk/*']) }} menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
    <span class="menu-link">
    <span class="menu-title">Educatie</span>
    <span class="menu-arrow d-lg-none"></span>
    </span>
                         <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
                             <div class="menu-item">
-                                <a class="menu-link" href="{{ url('/leerweg') }}">
+                                <a class="menu-link" href="{{ url('/flashcards') }}">
          <span class="menu-icon">
          <i class="ki-outline ki-rocket fs-2"></i>
          </span>
