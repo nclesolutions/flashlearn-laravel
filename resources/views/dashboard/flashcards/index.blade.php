@@ -63,9 +63,6 @@
                                     <span class="page-desc text-gray-700 fw-semibold fs-6 pt-3">Beheer en studeer je flitskaarten!</span>
                                 </h1>
                             </div>
-                            <div>
-                                <a href="{{ route('dashboard.flashcards.create') }}" class="btn btn-primary fw-semibold">Nieuwe Flitskaart</a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,22 +73,19 @@
                     <div class="d-flex flex-column flex-column-fluid">
                         <div id="kt_app_content" class="app-content flex-column-fluid">
                             <div id="container">
-                                <div class="card rounded border-transparent" data-bs-theme="light" style="background-color: #1C325E;">
-                                    <div class="card-body d-flex ps-xl-15">
-                                        <div class="m-0">
-                                            <div class="position-relative fs-2x z-index-2 fw-bold text-white mb-7">
-                                                <span class="me-2">
-                                                    Begin met het leren van je flitskaarten!
-                                                </span>
-                                            </div>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <a href='{{ route("dashboard.flashcards.create") }}' class="btn btn-primary fw-semibold me-3">Nieuwe Flitskaart</a>
-                                            </div>
-                                            <img src="/assets/media/illustrations/sigma-1/17-dark.png" class="position-absolute me-3 bottom-0 end-0 h-200px" alt="" />
+                                <div class="card rounded">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Flitskaarten <span class="badge badge-warning" style="margin-left: 5px;">BÉTA</span></h3>
+                                        <div class="card-toolbar">
+                                            <button type="button" class="btn btn-sm btn-light">
+                                                Nieuwe Flitskaart
+                                            </button>
                                         </div>
                                     </div>
+                                    <div class="card-body">
+                                        Welkom bij Flitskaarten, de gloednieuwe functie in Flashlearn! Met Flitskaarten kun je snel en effectief leren door middel van digitale kaartjes. Of je nu studeert voor een examen of gewoon je kennis wilt bijspijkeren, deze functie helpt je om op een eenvoudige en gestructureerde manier te oefenen. Maak je eigen kaartjes of kies uit onze uitgebreide collectie en verbeter je leerervaring in no time. Probeer het nu uit en ontdek hoe Flitskaarten je leren naar een hoger niveau tilt!
+                                    </div>
                                 </div>
-
                                 <div class="row pt-5">
                                     @foreach ($subjects as $subject)
                                         <div class="col-md-6 col-lg-4 mb-6">

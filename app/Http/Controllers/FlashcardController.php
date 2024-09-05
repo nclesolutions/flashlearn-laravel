@@ -49,34 +49,57 @@ class FlashcardController extends Controller
                 $query->where('user_id', Auth::id());
             })
             ->first();
-    
+
         if (!$flashcard) {
             return redirect()->route('dashboard.flashcards.result', $subject->id);
         }
-    
+
         return view('dashboard.flashcards.start', compact('subject', 'flashcard'));
     }
 
     public function answer(Request $request, Subject $subject)
     {
+        // Retrieve the flashcard by ID
         $flashcard = Flashcard::where('id', $request->flashcard_id)
-                               ->where('user_id', Auth::id())
-                               ->firstOrFail();
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
+        // Check if the user has already answered this flashcard
+        $alreadyAnswered = auth()->user()->flashcards()->where('flashcard_id', $flashcard->id)->exists();
+
+        if ($alreadyAnswered) {
+            // If already answered, retrieve the previous answer status
+            $previousAnswer = auth()->user()->flashcards()->where('flashcard_id', $flashcard->id)->first();
+            $correct = $previousAnswer->pivot->correct;  // Use the previous answer to determine if it was correct or not
+
+            // Return the answer_result view without awarding points again
+            $totalFlashcards = $subject->flashcards()->where('user_id', Auth::id())->count();
+            $answeredFlashcards = auth()->user()->flashcards()->where('subject_id', $subject->id)->count();
+            $finished = $answeredFlashcards >= $totalFlashcards;
+            $progress = ($answeredFlashcards / $totalFlashcards) * 100;
+
+            return view('dashboard.flashcards.answer_result', compact('correct', 'finished', 'progress', 'subject'));
+        }
+
+        // Otherwise, proceed with the new answer
         $correct = $request->answer === $flashcard->answer;
         $points = $correct ? rand(50, 100) : 0;
 
-        // Koppel de flashcard aan de user met de informatie of het correct was
+        // Attach the flashcard to the user and mark whether the answer was correct
         auth()->user()->flashcards()->attach($flashcard->id, ['correct' => $correct]);
         auth()->user()->increment('points', $points);
 
-        // Controleer of alle flitskaarten zijn voltooid
+        // Check if all flashcards are completed
         $totalFlashcards = $subject->flashcards()->where('user_id', Auth::id())->count();
         $answeredFlashcards = auth()->user()->flashcards()->where('subject_id', $subject->id)->count();
         $finished = $answeredFlashcards >= $totalFlashcards;
 
-        return view('dashboard.flashcards.answer_result', compact('correct', 'points', 'finished', 'subject'));
+        // Calculate progress
+        $progress = ($answeredFlashcards / $totalFlashcards) * 100;
+
+        return view('dashboard.flashcards.answer_result', compact('correct', 'points', 'finished', 'progress', 'subject'));
     }
+
 
     public function result(Subject $subject)
     {
