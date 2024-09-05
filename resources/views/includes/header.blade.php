@@ -58,7 +58,7 @@
          <span class="menu-icon">
          <i class="ki-outline ki-rocket fs-2"></i>
          </span>
-                                    <span class="menu-title">Leerweg</span>
+                                    <span class="menu-title">Flitskaarten</span>
                                 </a>
                             </div>
                             <div class="menu-item">
