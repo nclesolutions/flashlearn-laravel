@@ -72,7 +72,7 @@
                             <div id="container">
                                 <div class="card rounded">
                                     <div class="card-header">
-                                        <h3 class="card-title">Flitskaarten <span class="badge badge-warning" style="margin-left: 5px;">BÉTA</span></h3>
+                                        <h3 class="card-title">Flitskaarten <span class="badge badge-success" style="margin-left: 5px;">BÉTA</span></h3>
                                         <div class="card-toolbar">
                                             <a href="{{ route('dashboard.flashcards.create') }}" class="btn btn-sm btn-light">
                                                 Nieuwe Flitskaart

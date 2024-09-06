@@ -81,7 +81,7 @@
                             <div id="container">
                                 <div class="card rounded">
                                     <div class="card-header">
-                                        <h3 class="card-title">Resultaten <span class="badge badge-warning" style="margin-left: 5px;">🎉</span></h3>
+                                        <h3 class="card-title">Resultaten</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="container">
