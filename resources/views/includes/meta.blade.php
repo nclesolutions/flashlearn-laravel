@@ -12,3 +12,4 @@
 <meta name="twitter:title" content="FlashLearn - De Complete Digitale Leeromgeving voor Scholen en Individuele Gebruikers">
 <meta name="twitter:description" content="FlashLearn biedt alles wat je nodig hebt voor een effectieve en leuke leerervaring, van cijfers en huiswerk tot gamified leren.">
 <meta name="twitter:image" content="{{ asset('auth/img/favicon.png') }}">
+<meta name="viewport" content="width=device-width, initial-scale=1" />

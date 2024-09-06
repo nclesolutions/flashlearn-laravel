@@ -133,7 +133,7 @@
                                             <!--begin::Card toolbar-->
                                             <div class="card-toolbar gap-3">
                                                 <!--begin::Chat-->
-                                                <a href="apps/inbox/reply.html" class="btn btn-sm btn-light btn-active-light-primary">
+                                                <a href="/chat" class="btn btn-sm btn-light btn-active-light-primary">
                                                     <i class="ki-outline ki-messages fs-2"></i>Contacteer Docent</a>
                                                 <!--end::Chat-->
                                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
