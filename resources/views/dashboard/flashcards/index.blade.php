@@ -74,9 +74,9 @@
                                     <div class="card-header">
                                         <h3 class="card-title">Flitskaarten <span class="badge badge-warning" style="margin-left: 5px;">BÉTA</span></h3>
                                         <div class="card-toolbar">
-                                            <button type="button" class="btn btn-sm btn-light">
+                                            <a href="{{ route('dashboard.flashcards.create') }}" class="btn btn-sm btn-light">
                                                 Nieuwe Flitskaart
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="card-body">
