@@ -114,4 +114,48 @@ class FlashcardController extends Controller
 
         return view('dashboard.flashcards.result', compact('subject', 'correctAnswers', 'totalFlashcards'));
     }
+
+    // Import method
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:json',
+        ]);
+
+        $file = $request->file('file');
+        $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
+
+        foreach ($jsonData as $flashcardData) {
+            Flashcard::create([
+                'subject_id' => $flashcardData['subject_id'],
+                'user_id' => Auth::id(),
+                'question' => $flashcardData['question'],
+                'answer' => $flashcardData['answer'],
+            ]);
+        }
+
+        return redirect()->route('dashboard.flashcards.index')->with('success', 'Flitskaarten succesvol geïmporteerd!');
+    }
+
+
+    // Export method
+    public function export()
+    {
+        $flashcards = Flashcard::where('user_id', Auth::id())->get();
+
+        $filename = 'composer require phpoffice/phpspreadsheet
+.csv';
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, ['subject_id', 'question', 'answer']);  // Header
+
+        foreach ($flashcards as $flashcard) {
+            fputcsv($handle, [$flashcard->subject_id, $flashcard->question, $flashcard->answer]);
+        }
+
+        fclose($handle);
+
+        return response()->download($filename);
+    }
+
+
 }

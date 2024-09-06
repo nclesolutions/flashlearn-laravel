@@ -68,7 +68,9 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
 
     // Route om de totaalresultaten te bekijken nadat alle flitskaarten zijn beantwoord
     Route::get('/flashcards/result/{subject}', [FlashcardController::class, 'result'])->name('dashboard.flashcards.result');
-    
+    Route::post('/flashcards/import', [FlashcardController::class, 'import'])->name('dashboard.flashcards.import');
+    Route::get('/flashcards/export', [FlashcardController::class, 'export'])->name('dashboard.flashcards.export');
+
 });
 
 Route::get('/inloggen', [AuthController::class, 'showLoginForm'])->name('login');

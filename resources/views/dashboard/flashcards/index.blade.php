@@ -98,8 +98,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-body py-4">
-                                                    <div class="m-0">
-                                                        <a href="{{ route('dashboard.flashcards.start', $subject->id) }}" class="btn rounded btn-sm btn-light me-2 mb-2">Start</a>
+                                                    <div>
+                                                        <a href="{{ route('dashboard.flashcards.start', $subject->id) }}" class="btn btn-sm btn-primary me-2 ">Start met leren</a>
                                                     </div>
                                                 </div>
                                             </div>

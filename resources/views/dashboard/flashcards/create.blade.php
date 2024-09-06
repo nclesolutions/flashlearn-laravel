@@ -84,6 +84,11 @@
                                 <div class="card rounded">
                                     <div class="card-header">
                                         <h3 class="card-title">Flitskaarten <span class="badge badge-warning" style="margin-left: 5px;">BÉTA</span></h3>
+                                        <div class="card-toolbar">
+                                            <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importExportModal">
+                                                Importeren (JSON)
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <form action="{{ route('dashboard.flashcards.store') }}" method="POST">
@@ -127,6 +132,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" id="importExportModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Importeer Flitskaarten</h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"></i>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- Import Form -->
+                <form action="{{ route('dashboard.flashcards.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Bestand uploaden (JSON)</label>
+                        <input type="file" name="file" class="form-control" accept=".json" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Importeren</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Sluiten</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- JavaScript for Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>

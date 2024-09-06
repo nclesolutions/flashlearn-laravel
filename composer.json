@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "munafio/chatify": "^1.6",
+        "phpoffice/phpspreadsheet": "^2.2",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {
