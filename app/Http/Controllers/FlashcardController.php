@@ -10,7 +10,9 @@ class FlashcardController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::all();
+        $subjects = Subject::withCount('flashcards')
+            ->has('flashcards') // Alleen vakken met minstens één flitskaart
+            ->get();
         return view('dashboard.flashcards.index', compact('subjects'));
     }
 
