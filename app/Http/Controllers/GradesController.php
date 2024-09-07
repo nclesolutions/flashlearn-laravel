@@ -43,29 +43,38 @@ class GradesController extends Controller
         $userId = Auth::id();
         $schoolId = session('org_id');
 
-        // Fetch grades for the selected subject
-        $grades = DB::table('grades AS cijfers')
-            ->join('subjects AS vakken', 'cijfers.vak_id', '=', 'vakken.id')
-            ->where('cijfers.user_id', $userId)
-            ->where('vakken.vak_naam', $vak)
+        // Haal het vak op basis van de naam
+        $subject = DB::table('subjects')
+            ->where('vak_naam', $vak)
+            ->where('school_id', $schoolId)
+            ->first();
+
+        if (!$subject) {
+            return abort(404, 'Vak niet gevonden');
+        }
+
+        // Gebruik het vak-ID om de cijfers op te halen
+        $grades = DB::table('grades')
+            ->where('vak_id', $subject->id)
+            ->where('user_id', $userId)
             ->get();
 
-        // Fetch subjects to display in the sidebar
+        // Haal alle vakken op voor de sidebar
         $subjects = DB::table('subjects')
-            ->where('school_id', session('org_id'))
+            ->where('school_id', $schoolId)
             ->orderBy('gekregen_date', 'asc')
             ->get();
 
-        // Calculate the weighted average grades for each subject
+        // Bereken het gemiddelde voor elk vak
         $averageGrades = [];
         foreach ($subjects as $subject) {
-            $grades = DB::table('grades')
+            $subjectGrades = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
-                ->get(['grade', 'weight', 'onderdeel', 'created_at']);
+                ->get();
 
-            $totalWeight = $grades->sum('weight');
-            $weightedSum = $grades->sum(function($grade) {
+            $totalWeight = $subjectGrades->sum('weight');
+            $weightedSum = $subjectGrades->sum(function($grade) {
                 return $grade->grade * $grade->weight;
             });
 
@@ -79,45 +88,45 @@ class GradesController extends Controller
     {
         // Get the logged-in user's ID
         $userId = Auth::id();
-    
+
         // Fetch the org_id (school_id) from the students table using the user ID
         $schoolId = DB::table('students')
             ->where('user_id', $userId)
             ->value('org_id');
-    
+
         if (!$schoolId) {
             return response()->json(['error' => 'School ID not found for the user'], 404);
         }
-    
+
         $subjects = DB::table('subjects')
             ->where('school_id', $schoolId)
             ->orderBy('gekregen_date', 'asc')
             ->get();
-    
+
         $gradesData = [];
-    
+
         // Fetch grades and calculate weighted averages for each subject
         foreach ($subjects as $subject) {
             $grades = DB::table('grades')
                 ->where('vak_id', $subject->id)
                 ->where('user_id', $userId)
                 ->get(['grade', 'weight', 'onderdeel', 'created_at']); // Selecteer 'onderdeel' en 'created_at'
-    
+
             $totalWeight = $grades->sum('weight');
             $weightedSum = $grades->sum(function($grade) {
                 return $grade->grade * $grade->weight;
             });
-    
+
             $weightedAverage = $totalWeight > 0 ? $weightedSum / $totalWeight : null;
-    
+
             // Store grades and the weighted average in the gradesData array
             $gradesData[$subject->vak_naam] = [
                 'grades' => $grades->toArray(),
                 'weighted_average' => $weightedAverage
             ];
         }
-    
+
         return response()->json(['grades' => $gradesData]);
     }
-    
+
 }

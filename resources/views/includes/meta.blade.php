@@ -1,15 +1,23 @@
 <link rel="icon" href="{{ asset('auth/img/favicon.png') }}" type="image/png" sizes="16x16">
-<title>FlashLearn - De Complete Digitale Leeromgeving voor Scholen en Individuele Gebruikers</title>
-<meta name="description" content="FlashLearn is de ultieme digitale leeromgeving voor scholen en individuele gebruikers. Beheer cijfers, huiswerk, en meer met gebruiksvriendelijke tools, terwijl gamification leren leuker maakt. Probeer het nu!">
-<meta name="keywords" content="FlashLearn, digitale leeromgeving, cijfers beheren, huiswerk systeem, gamified leren, online leren, educatie software, leren leuk maken, scholieren, onderwijs, scholen, individuele gebruikers, leren gamification, digitale educatie">
+<title>FlashLearn - Dé Innovatieve Digitale Leeromgeving voor Scholen en Individuele Gebruikers</title>
+
+<meta name="description" content="Ontdek FlashLearn, dé innovatieve leeromgeving voor scholen en individuele gebruikers. Beheer cijfers, huiswerk en meer met krachtige tools. Gamification maakt leren boeiend, interactief en efficiënt. Start nu met FlashLearn en ervaar leren zoals nooit tevoren!">
+<meta name="keywords" content="FlashLearn, digitale leeromgeving, cijfers beheren, huiswerk, gamification, interactief leren, educatieve software, onderwijs, studenten, scholieren, gamified leren, scholen, leren leuk maken, digitale educatie">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="FlashLearn - De Complete Digitale Leeromgeving voor Scholen en Individuele Gebruikers">
-<meta property="og:description" content="Met FlashLearn krijgen scholen en individuele gebruikers toegang tot een veelzijdige digitale leeromgeving die leren efficiënter en leuker maakt. Ontdek de mogelijkheden van deze innovatieve tool.">
-<meta property="og:url" content="https://www.flashlearn.com">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph Meta Tags (voor social media) -->
+<meta property="og:title" content="FlashLearn - Dé Innovatieve Digitale Leeromgeving voor Scholen en Individuele Gebruikers">
+<meta property="og:description" content="FlashLearn transformeert hoe scholen en individuele gebruikers leren. Beheer alles, van cijfers tot huiswerk, en maak leren leuk met gamification. Sluit je aan bij de revolutie in digitaal leren!">
+<meta property="og:url" content="https://www.flashlearn.nl">
 <meta property="og:type" content="website">
 <meta property="og:image" content="{{ asset('auth/img/favicon.png') }}">
+
+<!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FlashLearn - De Complete Digitale Leeromgeving voor Scholen en Individuele Gebruikers">
-<meta name="twitter:description" content="FlashLearn biedt alles wat je nodig hebt voor een effectieve en leuke leerervaring, van cijfers en huiswerk tot gamified leren.">
+<meta name="twitter:title" content="FlashLearn - Dé Innovatieve Digitale Leeromgeving voor Scholen en Individuele Gebruikers">
+<meta name="twitter:description" content="Til je leerervaring naar een hoger niveau met FlashLearn. Cijfers, huiswerk en gamified leren in één krachtige tool. Start vandaag nog met leren, zoals het bedoeld is!">
 <meta name="twitter:image" content="{{ asset('auth/img/favicon.png') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://www.flashlearn.nl">
