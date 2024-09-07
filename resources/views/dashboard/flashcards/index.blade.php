@@ -85,25 +85,27 @@
                                 </div>
                                 <div class="row pt-5">
                                     @foreach ($subjects as $subject)
-                                        <div class="col-md-6 col-lg-4 mb-6">
-                                            <div class="card card-custom rounded gutter-b">
-                                                <div class="card-header pt-3 pb-2">
-                                                    <div class="card-title">
-                                                        <h3 class="card-label">
-                                                            {{ $subject->vak_naam }}
-                                                        </h3>
-                                                    </div>
-                                                    <div class="card-toolbar">
-                                                        <span class="badge badge-light-success">{{ $subject->flashcards->count() }} kaarten</span>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body py-4">
-                                                    <div>
-                                                        <a href="{{ route('dashboard.flashcards.start', $subject->id) }}" class="btn btn-sm btn-primary me-2 ">Start met leren</a>
-                                                    </div>
+                                    <div class="col-md-6 col-lg-4 mb-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">{{ $subject->vak_naam }}</h3>
+                                                <div class="card-toolbar">
+                                                    <a href="{{ route('dashboard.flashcards.start', $subject->id) }}" class="btn btn-sm btn-light">
+                                                        Starten
+                                                    </a>
                                                 </div>
                                             </div>
+                                            <div class="card-body">
+                                                Met deze flitskaarten kun je je voorbereiden op examens, je geheugen trainen en je kennis verdiepen. Klik op de onderstaande knop om direct te starten.
+                                            </div>
+                                            <div class="card-footer">
+                                                                    <span class="badge badge-light-success">
+                        {{ $subject->flashcards->count() }} kaarten
+                    </span>
+                                            </div>
+
                                         </div>
+                                    </div>
                                     @endforeach
                                 </div>
 
