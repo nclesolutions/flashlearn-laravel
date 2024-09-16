@@ -158,7 +158,7 @@ class AuthController extends Controller
 
             return back()->withErrors(['email' => __($status)]);
         } else {
-            return back()->withErrors(['email' => __('We can\'t find a user with that email address.')]);
+            return back()->withErrors(['email' => __('We hebben geen account gevonden met dit e-mailadres.')]);
         }
     }
 

@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
         Route::get('/beveiliging', [ProfileController::class, 'security'])->name('profile.security');
     });
     Route::post('/account/update-bio', [ProfileController::class, 'updateBio'])->name('profile.updateBio');
+    Route::post('/account/update-security', [ProfileController::class, 'updateSecurity'])->name('profile.updateSecurity');
     // Project Routes
     Route::prefix('werkstuk')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('dashboard.project.index');

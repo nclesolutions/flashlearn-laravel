@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -77,6 +78,43 @@ class ProfileController extends Controller
             'account' => $account,
             'biography' => $biography,
             'schoolInfo' => $schoolInfo,
+        ]);
+    }
+    public function updateSecurity(Request $request)
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Validate the request
+        $request->validate([
+            'email' => 'required|email|unique:users,email,' . $user->id, // Ensure email is unique but ignore the current user's email
+            'current_password' => 'required', // Old password is required
+            'new_password' => 'nullable|min:8', // New password must be confirmed
+        ]);
+
+        // Verify the current password matches the one stored in the database
+        if (!Hash::check($request->input('current_password'), $user->password)) {
+            return back()->withErrors(['current_password' => 'Het huidige wachtwoord is onjuist.']);
+        }
+
+        // Update the email if it's changed
+        if ($user->email !== $request->input('email')) {
+            $user->email = $request->input('email');
+        }
+
+        // Update the password if a new one is provided
+        if ($request->filled('new_password')) {
+            $user->password = Hash::make($request->input('new_password'));
+        }
+
+        // Save the updated user information
+        $user->save();
+
+        // Redirect with success message
+        return redirect()->route('profile.security')->with('status', [
+            'title' => 'Gelukt!',
+            'message' => 'Je beveiligingsinstellingen zijn bijgewerkt!',
+            'type' => 'success',
         ]);
     }
 

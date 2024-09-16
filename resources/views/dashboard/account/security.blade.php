@@ -151,36 +151,46 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-                                    <div class="card-header cursor-pointer">
-                                        <div class="card-title m-0">
-                                            <h3 class="fw-bold m-0">Beveiliging</h3>
+                                <form action="{{ route('profile.updateSecurity') }}" method="post">
+                                    @csrf
+                                    <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                                        <div class="card-header cursor-pointer">
+                                            <div class="card-title m-0">
+                                                <h3 class="fw-bold m-0">Beveiliging</h3>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-9">
+                                            <!-- E-Mail -->
+                                            <div class="row mb-10">
+                                                <label class="col-lg-4 fw-semibold text-muted">E-Mailadres</label>
+                                                <div class="col-lg-8">
+                                                    <input type="email" name="email" class="form-control fw-semibold fs-6 text-gray-800" value="{{ old('email', $account->email) }}" required>
+                                                </div>
+                                            </div>
+                                            <!-- Old Password -->
+                                            <div class="row mb-10">
+                                                <label class="col-lg-4 fw-semibold text-muted">Huidig Wachtwoord</label>
+                                                <div class="col-lg-8 fv-row">
+                                                    <input type="password" name="current_password" class="form-control fw-semibold fs-6 text-gray-800" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- New Password -->
+                                            <div class="row mb-10">
+                                                <label class="col-lg-4 fw-semibold text-muted">Nieuw Wachtwoord</label>
+                                                <div class="col-lg-8">
+                                                    <input type="password" name="new_password" class="form-control fw-semibold fs-6 text-gray-800" required>
+                                                </div>
+                                            </div>
+                                            <!-- Save Button -->
+                                            <div class="row">
+                                                <div class="col-lg-8 offset-lg-4">
+                                                    <button type="submit" class="btn btn-primary">Opslaan</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="card-body p-9">
-                                        <div class="row mb-7">
-                                            <label class="col-lg-4 fw-semibold text-muted">Volledige Naam</label>
-                                            <div class="col-lg-8">
-                                                <span class="fw-bold fs-6 text-gray-800">{{ $account->firstname }} {{ $account->lastname }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-7">
-                                            <label class="col-lg-4 fw-semibold text-muted">School / Bedrijf</label>
-                                            <div class="col-lg-8 fv-row">
-                                                <span class="fw-semibold text-gray-800 fs-6">{{ $schoolInfo->name }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-10">
-                                            <label class="col-lg-4 fw-semibold text-muted">Biografie</label>
-                                            <div class="col-lg-8">
-                                                <span class="fw-semibold fs-6 text-gray-800">{{ $account->biography }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
+                                </form>
                             </div>
                         </div>
                         <!--end::Content wrapper-->
