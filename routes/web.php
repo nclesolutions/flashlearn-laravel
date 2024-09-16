@@ -34,8 +34,12 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
     Route::get('/vakken', [SubjectController::class, 'index'])->name('dashboard.subjects.index');
     Route::get('/vak/bekijk/{vak}', [SubjectController::class, 'view'])->name('dashboard.subjects.view');
 
-    Route::get('/account/profiel', [ProfileController::class, 'index'])->name('profile.index');
-
+    Route::prefix('account')->group(function () {
+        Route::get('/profiel', [ProfileController::class, 'index'])->name('profile.index');
+        Route::get('/instellingen', [ProfileController::class, 'settings'])->name('profile.settings');
+        Route::get('/beveiliging', [ProfileController::class, 'security'])->name('profile.security');
+    });
+    Route::post('/account/update-bio', [ProfileController::class, 'updateBio'])->name('profile.updateBio');
     // Project Routes
     Route::prefix('werkstuk')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('dashboard.project.index');
@@ -49,8 +53,7 @@ Route::middleware(['auth', 'verified', CheckUserMembership::class, CheckUserActi
 
     // School Routes
     Route::get('/school', [SchoolController::class, 'index'])->name('school.index');
-    Route::get('/schoolchat', [SchoolController::class, 'contact'])->name('school.contact');
-
+    Route::get('/school/chat', [SchoolController::class, 'contact'])->name('school.contact');
 
     Route::get('/flashcards', [FlashcardController::class, 'index'])->name('dashboard.flashcards.index');
 
