@@ -22,11 +22,6 @@ class UserController extends Controller
                 $orgID = $perm->org_id;
                 $permission = $perm->perm;
 
-                // If the user has the "Docent" permission, redirect to docenten.flashlearn.nl
-                if ($permission === 'Docent') {
-                    return Redirect::to('https://docenten.flashlearn.nl')->send();
-                }
-
                 // Get the organization details
                 $org = Org::find($orgID);
 
