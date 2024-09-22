@@ -5,7 +5,7 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class CheckUserMembership
+class FetchSchool
 {
     public function handle($request, Closure $next)
     {
@@ -30,13 +30,7 @@ class CheckUserMembership
                         'org_id' => $school->org_id,
                         'org_web' => $school->website,
                     ]);
-                } else {
-                    // Als er geen school is gevonden, redirect naar dashboard
-                    return redirect()->route('dashboard')->with('error', 'Je bent niet gekoppeld aan een school.');
                 }
-            } else {
-                // Als er geen lidmaatschap is gevonden, redirect naar dashboard
-                return redirect()->route('dashboard')->with('error', 'Je bent niet gekoppeld aan een school.');
             }
         }
 
