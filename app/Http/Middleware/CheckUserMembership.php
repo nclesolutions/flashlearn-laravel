@@ -27,7 +27,7 @@ class CheckUserMembership
                     // Schoolinformatie opslaan in de sessie
                     session([
                         'orgName' => $school->name,
-                        'org_id' => $school->org_id,
+                        'org_id' => $school->id,
                         'org_web' => $school->website,
                     ]);
                 } else {

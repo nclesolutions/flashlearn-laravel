@@ -104,7 +104,7 @@
                                                     <div class="d-flex flex-stack py-4">
                                                         <div class="d-flex align-items-center">
                                                             <div class="ms-4">
-                                                                <a href="{{ url('/vak/bekijk/' . $subject->vak_naam) }}" class="fs-6 fw-bold text-gray-900 text-hover-primary mb-2">{{ $subject->vak_naam }}</a>
+                                                                <a href="{{ url('/vak/bekijk/' . $subject->name) }}" class="fs-6 fw-bold text-gray-900 text-hover-primary mb-2">{{ $subject->name }}</a>
                                                                 <div class="fw-semibold fs-7 text-muted">    @if($subject->teacher && $subject->teacher->user)
                                                                         {{ substr($subject->teacher->user->firstname, 0,1) }}. {{ $subject->teacher->user->lastname }}
                                                                     @else
@@ -127,7 +127,7 @@
                                             <!--begin::Card title-->
                                             <div class="card-title">
                                                 <i class="ki-outline ki-book-open fs-1 me-2"></i>
-                                                <h2>{{ $selectedSubject->vak_naam }}</h2>
+                                                <h2>{{ $selectedSubject->name }}</h2>
                                             </div>
                                             <!--end::Card title-->
                                             <!--begin::Card toolbar-->

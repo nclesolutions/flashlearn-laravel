@@ -23,7 +23,7 @@ class SchoolController extends Controller
         $schoolInfo = null;
         if ($userSchoolId) {
             $schoolInfo = DB::table('schools')
-                ->where('org_id', $userSchoolId)
+                ->where('id', $userSchoolId)
                 ->first();
         }
 

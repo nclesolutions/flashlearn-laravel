@@ -285,7 +285,7 @@
                                                             </td>
                                                             <td>
                                                                 <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">Je hebt een <b>{{ $cijfer->grade }}</b> gehaald!</a>
-                                                                <span class="text-gray-400 fw-bold fs-7 d-block">{{ $cijfer->vak_naam }} - {{ $cijfer->onderdeel }}</span>
+                                                                <span class="text-gray-400 fw-bold fs-7 d-block">{{ $cijfer->name }} - {{ $cijfer->onderdeel }}</span>
                                                             </td>
                                                             <td class="text-end">
                                                                 <span data-kt-element="status" class="badge {{ $badgeColor }}">{{ $status }}</span>

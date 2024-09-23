@@ -99,18 +99,16 @@
                                                 @foreach ($subjects as $subject)
                                                     @php
                                                         // Check if the current subject is the active one based on the URL
-                                                        $isActive = request()->segment(3) == $subject->vak_naam;
+                                                        $isActive = request()->segment(3) == $subject->name;
                                                         $activeClass = $isActive ? 'active' : 'text-gray-900';
                                                     @endphp
                                                     <div class="d-flex flex-stack py-4">
                                                         <div class="d-flex align-items-center">
                                                             <div class="ms-4">
-                                                                <a href="{{ url('/cijfers/view/' . $subject->vak_naam) }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">
-                                                                    {{ $subject->vak_naam }}
+                                                                <a href="{{ url('/cijfers/view/' . $subject->name) }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">
+                                                                    {{ $subject->name }}
                                                                 </a>
-                                                                <div class="fw-semibold fs-7 text-muted">
-                                                                    Gemiddeld {{ number_format($averageGrades[$subject->vak_naam] ?? 0.0, 1) }}
-                                                                </div>
+                                                                <div class="fw-semibold fs-7 text-muted">Gemiddeld (Gewogen): {{ number_format($averageGrades[$subject->name] ?? 0.0, 1) }}                                                                    </div>
                                                             </div>
                                                         </div>
                                                     </div>
