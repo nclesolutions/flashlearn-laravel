@@ -12,7 +12,7 @@ class FetchSchool
         $user = Auth::user();
 
         if ($user) {
-            // Query om te controleren of de gebruiker lid is van een school
+            // Query om te controleren of de gebruiker een student is en bij een school hoort
             $membership = DB::table('students')
                 ->where('user_id', $user->id)
                 ->first();
@@ -20,14 +20,14 @@ class FetchSchool
             if ($membership) {
                 // Query om schoolgegevens op te halen
                 $school = DB::table('schools')
-                    ->where('org_id', $membership->org_id)
+                    ->where('id', $membership->org_id)  // Gebruik de 'id' van de school
                     ->first();
 
                 if ($school) {
                     // Schoolinformatie opslaan in de sessie
                     session([
                         'orgName' => $school->name,
-                        'org_id' => $school->org_id,
+                        'org_id' => $school->id,  // Gebruik de 'id' van de school
                         'org_web' => $school->website,
                     ]);
                 }

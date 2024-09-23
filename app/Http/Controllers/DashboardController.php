@@ -6,6 +6,7 @@ use App\Models\Assignment;
 use App\Models\Schedule;
 use App\Models\Grade;
 use App\Models\Teacher;
+use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,9 @@ class DashboardController extends Controller
         // Haal het ID van de huidige geauthenticeerde gebruiker op
         $userId = Auth::id();
 
+        // Haal de studentgegevens van de ingelogde gebruiker op
+        $student = Student::where('user_id', $userId)->first();
+
         // Tel het aantal huiswerkopdrachten voor de gebruiker
         $huiswerkCount = Homework::where('user_id', $userId)->count();
 
@@ -31,7 +35,7 @@ class DashboardController extends Controller
         $werkstukken = Assignment::where('owner_id', $userId)->get();
 
         // Haal de laatste 3 cijfers op voor de gebruiker
-        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.vak_naam', 'grades.onderdeel', 'grades.date_created')
+        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.name', 'grades.onderdeel', 'grades.date_created')
             ->join('subjects', 'grades.vak_id', '=', 'subjects.id')
             ->where('grades.user_id', $userId)
             ->orderBy('grades.date_created', 'desc')
@@ -42,10 +46,10 @@ class DashboardController extends Controller
         $weekNumber = $request->query('week', date('W'));
 
         // Haal het rooster op voor de huidige week
-        $schedule = Schedule::where('user_id', $userId)->first();
+        $schedule = Schedule::where('class_id', $student->class_id)->first();
 
         if ($schedule) {
-            $roosters = json_decode($schedule->roosters, true);
+            $roosters = json_decode($schedule->data, true);
             $currentWeekRooster = collect($roosters['weeks'])->firstWhere('week_number', $weekNumber);
 
             if ($currentWeekRooster) {
@@ -81,20 +85,23 @@ class DashboardController extends Controller
         // Zorg ervoor dat de gebruiker is geauthenticeerd
         $userId = Auth::id();
 
-        // Tel het aantal huiswerkopdrachten voor de gebruiker
+        // Haal de studentgegevens van de ingelogde gebruiker op
+        $student = Student::where('user_id', $userId)->first();
+
+        // Tel het aantal huiswerkopdrachten voor de student
         $huiswerkCount = Homework::where('user_id', $userId)->count();
 
-        // Tel het aantal werkstukken voor de gebruiker
+        // Tel het aantal werkstukken voor de student
         $werkstukCount = Assignment::where('owner_id', $userId)->count();
 
-        // Haal de werkstukken van de gebruiker op
+        // Haal de werkstukken van de student op
         $werkstukken = Assignment::where('owner_id', $userId)->get();
 
-        // Haal de laatste 3 cijfers op voor de gebruiker
-        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.vak_naam', 'grades.onderdeel', 'grades.date_created')
+        // Haal de laatste 3 cijfers op voor de student
+        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.name as subject_name', 'grades.part', 'grades.created_at as date_created')
             ->join('subjects', 'grades.vak_id', '=', 'subjects.id')
             ->where('grades.user_id', $userId)
-            ->orderBy('grades.date_created', 'desc')
+            ->orderBy('grades.created_at', 'desc')
             ->limit(3)
             ->get();
 
@@ -102,10 +109,10 @@ class DashboardController extends Controller
         $weekNumber = $request->query('week', date('W'));
 
         // Haal het rooster op voor de huidige week
-        $schedule = Schedule::where('user_id', $userId)->first();
+        $schedule = Schedule::where('class_id', $student->class_id)->first();
 
         if ($schedule) {
-            $roosters = json_decode($schedule->roosters, true);
+            $roosters = json_decode($schedule->data, true);
             $currentWeekRooster = collect($roosters['weeks'])->firstWhere('week_number', $weekNumber);
 
             if ($currentWeekRooster) {

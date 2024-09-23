@@ -20,7 +20,7 @@ class CheckUserMembership
             if ($membership) {
                 // Query om schoolgegevens op te halen
                 $school = DB::table('schools')
-                    ->where('org_id', $membership->org_id)
+                    ->where('id', $membership->org_id)
                     ->first();
 
                 if ($school) {
