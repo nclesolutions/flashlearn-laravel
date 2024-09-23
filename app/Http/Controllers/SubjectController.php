@@ -14,11 +14,12 @@ class SubjectController extends Controller
     public function index()
     {
         // Haal het school ID van de ingelogde gebruiker op
-        $schoolId = session('org_id');
+        $userId = Auth::id();
+        $classId = Student::where('user_id', $userId)->value('class_id');
 
-        // Haal alle vakken op met de gerelateerde leraar en gebruiker
+        // Haal alle vakken op met de gerelateerde leraar en gebruiker, gebaseerd op het klas ID
         $subjects = Subject::with(['teacher.user'])
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -28,13 +29,13 @@ class SubjectController extends Controller
 
     public function view($vak)
     {
-        $schoolId = session('org_id');
         $userId = Auth::id();
+        $classId = Student::where('user_id', $userId)->value('class_id');
         $currentWeek = now()->weekOfYear;
 
-        // Haal het geselecteerde vak op met de gerelateerde leraar en gebruiker
+        // Haal het geselecteerde vak op met de gerelateerde leraar en gebruiker, gebaseerd op het klas ID
         $selectedSubject = Subject::with(['teacher.user', 'homework'])
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->where('name', $vak)
             ->first();
 
@@ -43,18 +44,14 @@ class SubjectController extends Controller
             abort(404, 'Subject not found');
         }
 
-        // Haal alle vakken op om in de zijbalk te tonen
+        // Haal alle vakken op om in de zijbalk te tonen, gebaseerd op het klas ID
         $subjects = Subject::with(['teacher.user'])
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->orderBy('created_at', 'asc')
             ->get();
 
-        // Haal de klas van de ingelogde gebruiker op
-        $studentClass = Student::where('user_id', $userId)
-            ->value('class_id');
-
         // Haal het rooster van de klas van de gebruiker op
-        $rooster = Rooster::where('class_id', $studentClass)->first();
+        $rooster = Rooster::where('class_id', $classId)->first();
 
         if ($rooster) {
             $roosterData = json_decode($rooster->data, true);
@@ -87,7 +84,6 @@ class SubjectController extends Controller
         // Stuur het geselecteerde vak, gefilterde lessen, en de dagen door naar de view
         return view('dashboard.subjects.view', compact('selectedSubject', 'filteredLessons', 'dagen', 'subjects'));
     }
-
     public function APIIndex()
     {
         // Haal het ID van de ingelogde leerling op

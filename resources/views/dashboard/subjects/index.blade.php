@@ -95,27 +95,35 @@
                                         <div class="card-body pt-5" id="kt_contacts_list_body">
                                             <div class="scroll-y me-n5 pe-5 h-300px h-xl-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_contacts_list_header" data-kt-scroll-wrappers="#kt_content, #kt_contacts_list_body" data-kt-scroll-stretch="#kt_contacts_list, #kt_contacts_main" data-kt-scroll-offset="5px">
                                                 @if ($subjects->isEmpty())
-                                                    <div class="text-center py-5">
-                                                        <p class="text-gray-400 fs-4 fw-semibold mb-2">Geen vakken beschikbaar.</p>
-                                                        <img class="mw-100 mh-300px" alt="" src="{{ asset('assets/media/illustrations/sketchy-1/5.png') }}" />
-                                                    </div>
+                                                <div class="text-center py-5">
+                                                    <p class="text-gray-400 fs-4 fw-semibold mb-2">Geen vakken beschikbaar.</p>
+                                                    <img class="mw-100 mh-300px" alt="" src="{{ asset('assets/media/illustrations/sketchy-1/5.png') }}" />
+                                                </div>
                                                 @endif
                                                 @foreach ($subjects as $subject)
-                                                    <div class="d-flex flex-stack py-4">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="ms-4">
-                                                                <a href="{{ url('/vak/bekijk/' . $subject->name) }}" class="fs-6 fw-bold text-gray-900 text-hover-primary mb-2">{{ $subject->name }}</a>
-                                                                <div class="fw-semibold fs-7 text-muted">    @if($subject->teacher && $subject->teacher->user)
-                                                                        {{ substr($subject->teacher->user->firstname, 0,1) }}. {{ $subject->teacher->user->lastname }}
-                                                                    @else
-                                                                        Geen vaste leraar
-                                                                    @endif</div>
+                                                @php
+                                                $isActive = strtolower($subject->name) == strtolower($selectedSubject->name);
+                                                $activeClass = $isActive ? 'active text-primary' : 'text-gray-900';
+                                                @endphp
+                                                <div class="d-flex flex-stack py-4">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="ms-4">
+                                                            <a href="{{ url('/vak/bekijk/' . $subject->name) }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">{{ $subject->name }}</a>
+                                                            <div class="fw-semibold fs-7 text-muted">
+                                                                @if($subject->teacher && $subject->teacher->user)
+                                                                {{ substr($subject->teacher->user->firstname, 0, 1) }}. {{ $subject->teacher->user->lastname }}
+                                                                @else
+                                                                Geen vaste leraar
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="separator separator-dashed d-none"></div>
+                                                </div>
+                                                <div class="separator separator-dashed d-none"></div>
                                                 @endforeach
                                             </div>
+
+
                                         </div>
                                     </div>
                                 </div>
