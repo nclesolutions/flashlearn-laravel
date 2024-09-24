@@ -75,13 +75,13 @@
                                 <li class="breadcrumb-item">
                                     <i class="ki-outline ki-right fs-7 text-gray-700 mx-n1"></i>
                                 </li>
-                                <li class="breadcrumb-item text-white fw-bold lh-1">Flitskaarten voor {{ $subject->vak_naam }}</li>
+                                <li class="breadcrumb-item text-white fw-bold lh-1">Flitskaarten voor {{ $subject->name }}</li>
                             </ul>
                         </div>
                         <div class="d-flex flex-stack flex-wrap flex-lg-nowrap gap-4 gap-lg-10 pt-13 pb-6">
                             <div class="page-title me-5">
                                 <h1 class="page-heading d-flex text-white fw-bold fs-2 flex-column justify-content-center my-0">
-                                    Flitskaarten voor {{$subject->vak_naam}}
+                                    Flitskaarten voor {{$subject->name}}
                                     <span class="page-desc text-gray-700 fw-semibold fs-6 pt-3">Beheer en studeer je flitskaarten!</span>
                                 </h1>
                             </div>

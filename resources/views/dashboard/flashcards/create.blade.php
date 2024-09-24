@@ -97,7 +97,7 @@
                                                 <label for="subject_id" class="form-label">Vak</label>
                                                 <select name="subject_id" id="subject_id" class="form-control" required>
                                                     @foreach ($subjects as $subject)
-                                                    <option value="{{ $subject->id }}">{{ $subject->vak_naam }}</option>
+                                                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

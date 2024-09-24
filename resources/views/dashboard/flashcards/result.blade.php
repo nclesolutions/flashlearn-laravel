@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="container">
-                                            <h1>Resultaten voor {{ $subject->vak_naam }}</h1>
+                                            <h1>Resultaten voor {{ $subject->name }}</h1>
                                             <p>Je hebt {{ $correctAnswers }} van de {{ $totalFlashcards }} flitskaarten correct beantwoord!</p>
                                             <a href="{{ route('dashboard.flashcards.index') }}" class="btn btn-primary">Terug naar overzicht</a>
                                         </div>

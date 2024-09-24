@@ -88,7 +88,7 @@
                                     <div class="col-md-6 col-lg-4 mb-6">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="card-title">{{ $subject->vak_naam }}</h3>
+                                                <h3 class="card-title">{{ $subject->name }}</h3>
                                                 <div class="card-toolbar">
                                                     <a href="{{ route('dashboard.flashcards.start', $subject->id) }}" class="btn btn-sm btn-light">
                                                         Starten
