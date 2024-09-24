@@ -141,13 +141,13 @@
                                                                 <div class="fw-semibold fs-7 text-muted">{{ $inleverDate }}</div>
                                                                 @foreach ($AbsentieList as $row)
                                                                     @php
-                                                                        $formattedTime1 = \Carbon\Carbon::parse($row->begintijd)->format('H:i');
-                                                                        $formattedTime2 = \Carbon\Carbon::parse($row->eindtijd)->format('H:i');
+                                                                        $formattedTime1 = \Carbon\Carbon::parse($row->start_time)->format('H:i');
+                                                                        $formattedTime2 = \Carbon\Carbon::parse($row->end_time)->format('H:i');
                                                                         $isActive = $absence->unique_id == $row->unique_id;
                                                                         $activeClass = $isActive ? 'active' : 'text-gray-900';
                                                                     @endphp
 
-                                                                    <a href="{{ route('dashboard.absence.view', $row->unique_id) }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">{{ $row->reden }}</a>
+                                                                    <a href="{{ route('dashboard.absence.view', $row->unique_id) }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">{{ $row->reason }}</a>
                                                                     <div class="fw-semibold fs-7 text-muted">{{ $formattedTime1 }} tot {{ $formattedTime2 }}</div>
                                                                 @endforeach
                                                             </div>
@@ -192,7 +192,7 @@
                                                 <!--begin::Contact details-->
                                                 <div class="d-flex flex-column gap-2">
                                                     <!--begin::Name-->
-                                                    <h3 class="mb-0">{{ $absence->reden }}</h3>
+                                                    <h3 class="mb-0">{{ $absence->reason }}</h3>
                                                     <!--end::Name-->
                                                     <!--begin::Time-->
                                                     <div class="d-flex align-items-center gap-2">
@@ -221,7 +221,7 @@
                                                     <div class="d-flex flex-column gap-5 mt-7">
                                                         <!--begin::Notes-->
                                                         <div class="d-flex flex-column gap-1">
-                                                            <p>{{ $absence->opmerking }}</p>
+                                                            <p>{{ $absence->remark }}</p>
                                                         </div>
                                                         <!--end::Notes-->
                                                     </div>

@@ -31,8 +31,8 @@ class SchoolController extends Controller
 
         // Haal school-specifieke nieuwsbrieven op, gesorteerd op created_at en beperkt tot 1
         $schoolnewsletter = DB::table('newsletter')
-            ->join('users', 'newsletter.creator', '=', 'users.id') // Verbind de creator met de user tabel
-            ->where('school_id', $userSchoolId)
+            ->join('users', 'newsletter.user_id', '=', 'users.id') // Verbind de creator met de user tabel
+            ->where('org_id', $userSchoolId)
             ->orderBy('created_at', 'desc')
             ->limit(1)
             ->select('newsletter.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
@@ -40,8 +40,8 @@ class SchoolController extends Controller
 
         // Haal algemene nieuwsbrieven op (school_id is NULL), gesorteerd op created_at en beperkt tot 3
         $generalnewsletter = DB::table('newsletter')
-            ->join('users', 'newsletter.creator', '=', 'users.id') // Verbind de creator met de user tabel
-            ->whereNull('school_id')
+            ->join('users', 'newsletter.user_id', '=', 'users.id') // Verbind de creator met de user tabel
+            ->whereNull('org_id')
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->select('newsletter.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
@@ -87,8 +87,8 @@ class SchoolController extends Controller
 
         // Haal school-specifieke nieuwsbrieven op, gesorteerd op created_at en beperkt tot 1
         $schoolNewsletter = DB::table('newsletter')
-            ->join('users', 'newsletter.creator', '=', 'users.id') // Verbind de creator met de user tabel
-            ->where('school_id', $userSchoolId)
+            ->join('users', 'newsletter.user_id', '=', 'users.id') // Verbind de creator met de user tabel
+            ->where('org_id', $userSchoolId)
             ->orderBy('created_at', 'desc')
             ->limit(1)
             ->select('newsletter.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden
@@ -96,8 +96,8 @@ class SchoolController extends Controller
 
         // Haal algemene nieuwsbrieven op (school_id is NULL), gesorteerd op created_at en beperkt tot 3
         $generalNewsletter = DB::table('newsletter')
-            ->join('users', 'newsletter.creator', '=', 'users.id') // Verbind de creator met de user tabel
-            ->whereNull('school_id')
+            ->join('users', 'newsletter.user_id', '=', 'users.id') // Verbind de creator met de user tabel
+            ->whereNull('org_id')
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->select('newsletter.*', 'users.firstname', 'users.lastname') // Selecteer de gewenste velden

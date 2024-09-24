@@ -12,7 +12,6 @@ class GradesController extends Controller
     {
         // Get the logged-in user's ID
         $userId = Auth::id();
-        $schoolId = session('org_id');
         $classId = Student::where('user_id', $userId)->value('class_id');
 
         // Fetch the subjects related to the user's school
@@ -25,7 +24,7 @@ class GradesController extends Controller
         $averageGrades = [];
         foreach ($subjects as $subject) {
             $grades = DB::table('grades')
-                ->where('vak_id', $subject->id)
+                ->where('subject_id', $subject->id)
                 ->where('user_id', $userId)
                 ->get(['grade', 'weight']);
 
@@ -51,13 +50,10 @@ class GradesController extends Controller
             ->where('class_id', $classId)
             ->first();
 
-        if (!$subject) {
-            return abort(404, 'Vak niet gevonden');
-        }
 
         // Gebruik het vak-ID om de cijfers op te halen
         $grades = DB::table('grades')
-            ->where('vak_id', $subject->id)
+            ->where('subject_id', $subject->id)
             ->where('user_id', $userId)
             ->get();
 
@@ -71,7 +67,7 @@ class GradesController extends Controller
         $averageGrades = [];
         foreach ($subjects as $subject) {
             $subjectGrades = DB::table('grades')
-                ->where('vak_id', $subject->id)
+                ->where('subject_id', $subject->id)
                 ->where('user_id', $userId)
                 ->get();
 
@@ -102,7 +98,7 @@ class GradesController extends Controller
 
         $subjects = DB::table('subjects')
             ->where('org_id', $schoolId)
-            ->orderBy('gekregen_date', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $gradesData = [];
@@ -110,9 +106,9 @@ class GradesController extends Controller
         // Fetch grades and calculate weighted averages for each subject
         foreach ($subjects as $subject) {
             $grades = DB::table('grades')
-                ->where('vak_id', $subject->id)
+                ->where('subject_id', $subject->id)
                 ->where('user_id', $userId)
-                ->get(['grade', 'weight', 'onderdeel', 'created_at']); // Selecteer 'onderdeel' en 'created_at'
+                ->get(['grade', 'weight', 'part', 'created_at']); // Selecteer 'onderdeel' en 'created_at'
 
             $totalWeight = $grades->sum('weight');
             $weightedSum = $grades->sum(function($grade) {

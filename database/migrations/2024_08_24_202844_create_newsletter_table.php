@@ -9,11 +9,11 @@ class CreateNewsletterTable extends Migration
     public function up()
     {
         Schema::create('newsletter', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('creator');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('content');
-            $table->unsignedBigInteger('school_id')->nullable();
+            $table->unsignedBigInteger('org_id')->nullable();
             $table->timestamps();
         });
     }

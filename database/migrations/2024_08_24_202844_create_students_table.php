@@ -9,10 +9,11 @@ class CreateStudentsTable extends Migration
     public function up()
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('org_id');
-            $table->string('perm', 50);
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('org_id');
+            $table->unsignedInteger('class_id');
+            $table->string('role', 50);
             $table->timestamps();
         });
     }

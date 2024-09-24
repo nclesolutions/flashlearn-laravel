@@ -9,11 +9,9 @@ class CreateClassesTable extends Migration
     public function up()
     {
         Schema::create('classes', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('school_id');
-            $table->unsignedInteger('docent_id');
-            $table->date('gekregen_date');
-            $table->string('vak_naam');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('org_id');
+            $table->string('name');
             $table->timestamps();
         });
     }

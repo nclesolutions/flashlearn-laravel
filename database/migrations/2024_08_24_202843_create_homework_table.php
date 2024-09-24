@@ -9,13 +9,13 @@ class CreateHomeworkTable extends Migration
     public function up()
     {
         Schema::create('homework', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('user_id');
-            $table->string('inlever_date');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('return_date');
             $table->string('unique_id');
-            $table->string('vak');
+            $table->string('subject');
             $table->string('title');
-            $table->text('beschrijving')->default('Geen beschrijving meegegeven.');
+            $table->text('description')->default('Geen beschrijving meegegeven.');
             $table->timestamps();
         });
     }

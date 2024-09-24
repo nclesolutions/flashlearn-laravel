@@ -227,7 +227,7 @@
 
                                                             @php
                                                                 // Sorteer de collectie van huiswerkitems op basis van de inleverdatum (van oud naar nieuw)
-                                                                $sortedHomework = $selectedSubject->homework->sortBy('inlever_date');
+                                                                $sortedHomework = $selectedSubject->homework->sortBy('return_date');
                                                             @endphp
 
                                                             @if($selectedSubject->homework->isEmpty())
@@ -238,7 +238,7 @@
                                                             @foreach($sortedHomework as $homework)
                                                                 @php
                                                                     // Bereken het aantal dagen tot de inleverdatum
-                                                                    $daysUntilDue = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($homework->inlever_date), false);
+                                                                    $daysUntilDue = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($homework->return_date), false);
                                                                     $barColor = 'bg-info'; // Default kleur
 
                                                                     // Pas de kleur aan op basis van het aantal dagen tot de inleverdatum
@@ -261,13 +261,13 @@
                                                                     <!--begin::Info-->
                                                                     <div class="fw-semibold ms-5 text-gray-600">
                                                                         <!--begin::Time-->
-                                                                        <div class="fs-5">{{ \Carbon\Carbon::parse($homework->inlever_date)->format('d-m-Y') }}</div>
+                                                                        <div class="fs-5">{{ \Carbon\Carbon::parse($homework->return_date)->format('d-m-Y') }}</div>
                                                                         <!--end::Time-->
                                                                         <!--begin::Title-->
-                                                                        <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">{{ $homework->vak }} - {{ $homework->title }}</a>
+                                                                        <a href="#" class="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">{{ $homework->subject }} - {{ $homework->title }}</a>
                                                                         <!--end::Title-->
                                                                         <!--begin::Description-->
-                                                                        <div class="text-gray-500">{{ $homework->beschrijving }}</div>
+                                                                        <div class="text-gray-500">{{ $homework->description }}</div>
                                                                         <!--end::Description-->
                                                                     </div>
                                                                     <!--end::Info-->

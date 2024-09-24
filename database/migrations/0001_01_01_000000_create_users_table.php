@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('biography');
             $table->rememberToken();
             $table->string('activation_code')->default('activated');
+            $table->integer('points')->default(0);
             $table->timestamps();
         });
 

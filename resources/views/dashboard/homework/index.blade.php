@@ -143,7 +143,7 @@
                                                                     <div class="fw-semibold fs-7 text-muted">{{ $inleverDatum }}</div>
                                                                     @foreach ($huiswerk as $row)
                                                                         <a href="{{ url('/huiswerk/view/' . $row->unique_id) }}" class="fs-6 fw-bold text-hover-primary mb-2 text-gray-900">{{ $row->title }}</a>
-                                                                        <div class="fw-semibold fs-7 text-muted"><b>{{ $row->vak }}</b></div>
+                                                                        <div class="fw-semibold fs-7 text-muted"><b>{{ $row->subject }}</b></div>
                                                                     @endforeach
                                                                 </div>
                                                             </div>

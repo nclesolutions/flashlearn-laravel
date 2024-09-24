@@ -5,27 +5,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateFlashcardUserTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('flashcard_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('flashcard_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('flashcard_id');
+            $table->unsignedBigInteger('user_id');
             $table->boolean('correct');
             $table->timestamps();
+
+            $table->foreign('flashcard_id')->references('id')->on('flashcards')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('flashcard_user');

@@ -103,14 +103,14 @@
                                                         <img class="mw-100 mh-300px" alt="" src="{{ asset('assets/media/illustrations/sketchy-1/5.png') }}" />
                                                     </div>
                                                 @else
-                                                    @foreach ($absences as $date => $absenceGroup)
+                                                    @foreach ($absences as $given_date => $absenceGroup)
                                                         <div class="d-flex flex-stack py-4">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="ms-4">
-                                                                    <div class="fw-semibold fs-7 text-muted">{{ $date }}</div>
+                                                                    <div class="fw-semibold fs-7 text-muted">{{ $given_date }}</div>
                                                                     @foreach ($absenceGroup as $absence)
-                                                                        <a href="{{ route('dashboard.absence.view', $absence->unique_id) }}" class="fs-6 fw-bold text-hover-primary mb-2 text-gray-900">{{ $absence->reden }}</a>
-                                                                        <div class="fw-semibold fs-7 text-muted">{{ \Carbon\Carbon::parse($absence->begintijd)->format('H:i') }} tot {{ \Carbon\Carbon::parse($absence->eindtijd)->format('H:i') }}</div>
+                                                                        <a href="{{ route('dashboard.absence.view', $absence->unique_id) }}" class="fs-6 fw-bold text-hover-primary mb-2 text-gray-900">{{ $absence->reason }}</a>
+                                                                        <div class="fw-semibold fs-7 text-muted">{{ \Carbon\Carbon::parse($absence->start_time)->format('H:i') }} tot {{ \Carbon\Carbon::parse($absence->end_time)->format('H:i') }}</div>
                                                                     @endforeach
                                                                 </div>
                                                             </div>

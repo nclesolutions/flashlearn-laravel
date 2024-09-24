@@ -9,12 +9,13 @@ class CreateGradesTable extends Migration
     public function up()
     {
         Schema::create('grades', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('vak_id');
-            $table->unsignedInteger('user_id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('grade', 3);
-            $table->string('onderdeel');
-            $table->date('date_created');
+            $table->string('part');
+            $table->decimal('weight', 5, 2)->default(1.00);
+            $table->date('date_created')->nullable();
             $table->timestamps();
         });
     }

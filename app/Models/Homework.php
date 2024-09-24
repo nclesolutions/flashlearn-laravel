@@ -13,10 +13,10 @@ class Homework extends Model
     protected $fillable = [
         'user_id',
         'unique_id',
-        'vak',  // Assuming 'vak' is a valid column representing the subject
+        'subject',  // Assuming 'vak' is a valid column representing the subject
         'title',
-        'beschrijving',  // Correct field name for description
-        'inlever_date'  // Correct field name for due date
+        'content',  // Correct field name for description
+        'return_date'  // Correct field name for due date
     ];
 
     // Relatie met het Subject

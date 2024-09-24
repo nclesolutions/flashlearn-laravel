@@ -10,6 +10,6 @@ class Grade extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class, 'vak_id');
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 }

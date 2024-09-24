@@ -16,10 +16,10 @@ class ProjectController extends Controller
 
         // Fetch unique vakken that have associated werkstukken
         $availableVakken = DB::table('projects')
-            ->select('vak')
-            ->groupBy('vak')
+            ->select('subject')
+            ->groupBy('subject')
             ->havingRaw('COUNT(*) > 0')
-            ->pluck('vak')
+            ->pluck('subject')
             ->toArray();
 
         // Query to count all rows in the "werkstukken" table
@@ -28,19 +28,19 @@ class ProjectController extends Controller
             $werkstukcount = DB::table('projects')->count();
         } else {
             // Count filtered werkstukken
-            $werkstukcount = DB::table('projects')->where('vak', $vak)->count();
+            $werkstukcount = DB::table('projects')->where('subject', $vak)->count();
         }
 
         // Query to get the werkstukken based on the selected subject
         if ($vak == 'all') {
             $werkstukken = DB::table('projects')->get();
         } else {
-            $werkstukken = DB::table('projects')->where('vak', $vak)->get();
+            $werkstukken = DB::table('projects')->where('subject', $vak)->get();
         }
 
         // Iterate through werkstukken and fetch related data
         foreach ($werkstukken as $werkstuk) {
-            $werkstuk->creator = DB::table('users')->where('id', $werkstuk->owner_id)->first();
+            $werkstuk->creator = DB::table('users')->where('id', $werkstuk->user_id)->first();
             $werkstuk->total_characters = DB::table('projects')
                 ->where('id', $werkstuk->id)
                 ->sum(DB::raw('CHAR_LENGTH(content)'));
@@ -60,7 +60,7 @@ class ProjectController extends Controller
         }
 
         // Retrieve the creator of the werkstuk
-        $creator = DB::table('users')->where('id', $werkstuk->owner_id)->first();
+        $creator = DB::table('users')->where('id', $werkstuk->user_id)->first();
 
         // Pass the data to the view
         return view('dashboard.project.view', compact('werkstuk', 'creator'));
@@ -79,7 +79,7 @@ class ProjectController extends Controller
         $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
 
         // Check if the werkstuk exists and if the current user is the owner
-        if ($werkstuk && $werkstuk->owner_id == Auth::id()) {
+        if ($werkstuk && $werkstuk->user_id == Auth::id()) {
             DB::table('projects')->where('unique_id', $id)->delete();
 
             return redirect()->route('dashboard.project.index')->with('success', 'Werkstuk succesvol verwijderd.');
@@ -116,8 +116,8 @@ class ProjectController extends Controller
             ->where('unique_id', $request->werkstuk_id)
             ->update([
                 'title' => $request->title,
-                'niveau' => $request->niveau,
-                'vak' => $request->vak,
+                'level' => $request->niveau,
+                'subject' => $request->vak,
                 'content' => $request->editor,
             ]);
 
@@ -129,18 +129,18 @@ class ProjectController extends Controller
         // Validate the incoming request data
         $request->validate([
             'title' => 'required|string|max:255',
-            'niveau' => 'required|string|max:255',
-            'vak' => 'required|string|max:255',
+            'level' => 'required|string|max:255',
+            'subject' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
         // Create a new werkstuk using the validated data
         $werkstuk = new Werkstuk();
         $werkstuk->title = $request->input('title');
-        $werkstuk->niveau = $request->input('niveau');
-        $werkstuk->vak = $request->input('vak');
+        $werkstuk->level = $request->input('level');
+        $werkstuk->subject = $request->input('subject');
         $werkstuk->content = $request->input('content');
-        $werkstuk->owner_id = Auth::id(); // Assuming the current authenticated user is the owner
+        $werkstuk->user_id = Auth::id(); // Assuming the current authenticated user is the owner
         $werkstuk->unique_id = Str::uuid(); // Generate a unique identifier
 
         // Save the werkstuk to the database
@@ -167,12 +167,12 @@ class ProjectController extends Controller
         if ($vak == 'all') {
             $projects = DB::table('projects')->get();
         } else {
-            $projects = DB::table('projects')->where('vak', $vak)->get();
+            $projects = DB::table('projects')->where('subject', $vak)->get();
         }
 
         // Remove sensitive data
         $projects->transform(function ($project) {
-            unset($project->owner_id);
+            unset($project->user_id);
             return $project;
         });
 
@@ -193,7 +193,7 @@ class ProjectController extends Controller
         }
 
         // Verwijder de eigenaar-id en andere gebruikersgegevens
-        unset($werkstuk->owner_id);
+        unset($werkstuk->user_id);
 
         return response()->json([
             'werkstuk' => $werkstuk,
@@ -207,7 +207,7 @@ class ProjectController extends Controller
         $werkstuk = DB::table('projects')->where('unique_id', $id)->first();
 
         // Controleer of het werkstuk bestaat en of de huidige gebruiker de eigenaar is
-        if ($werkstuk && $werkstuk->owner_id == Auth::id()) {
+        if ($werkstuk && $werkstuk->user_id == Auth::id()) {
             DB::table('projects')->where('unique_id', $id)->delete();
             return response()->json(['success' => 'Werkstuk succesvol verwijderd.']);
         }
@@ -232,14 +232,14 @@ class ProjectController extends Controller
         $werkstuk->niveau = $request->input('niveau');
         $werkstuk->vak = $request->input('vak');
         $werkstuk->content = $request->input('content');
-        $werkstuk->owner_id = Auth::id(); // Huidige ingelogde gebruiker als eigenaar
+        $werkstuk->user_id = Auth::id(); // Huidige ingelogde gebruiker als eigenaar
         $werkstuk->unique_id = Str::uuid(); // Genereer een unieke ID
 
         // Sla het werkstuk op in de database
         $werkstuk->save();
 
         // Verwijder de eigenaar-id en andere gebruikersgegevens voordat de response wordt gegeven
-        unset($werkstuk->owner_id);
+        unset($werkstuk->user_id);
 
         return response()->json(['success' => 'Werkstuk succesvol aangemaakt.', 'werkstuk' => $werkstuk], 201);
     }
@@ -260,7 +260,7 @@ class ProjectController extends Controller
             ->where('unique_id', $id)
             ->first();
 
-        if (!$werkstuk || $werkstuk->owner_id !== Auth::id()) {
+        if (!$werkstuk || $werkstuk->user_id !== Auth::id()) {
             return response()->json(['error' => 'Werkstuk niet gevonden of je hebt geen rechten om dit werkstuk bij te werken.'], 403);
         }
 
@@ -296,11 +296,11 @@ class ProjectController extends Controller
         $userId = Auth::id();
 
         // Fetch all projects associated with the logged-in user
-        $projects = DB::table('projects')->where('owner_id', $userId)->get();
+        $projects = DB::table('projects')->where('user_id', $userId)->get();
 
         // Optionally remove sensitive data
         $projects->transform(function ($project) {
-            unset($project->owner_id); // Remove the owner ID if not needed
+            unset($project->user_id); // Remove the owner ID if not needed
             return $project;
         });
 

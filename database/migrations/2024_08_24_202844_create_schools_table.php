@@ -9,10 +9,9 @@ class CreateSchoolsTable extends Migration
     public function up()
     {
         Schema::create('schools', function (Blueprint $table) {
-            $table->id('org_id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('website');
-            $table->timestamp('created')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('address')->nullable();
             $table->string('city', 100)->nullable();
             $table->string('state', 100)->nullable();

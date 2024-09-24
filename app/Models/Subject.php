@@ -16,7 +16,7 @@ class Subject extends Model
     // Relatie met de Homework-opdrachten op basis van de 'vak' kolom
     public function homework()
     {
-        return $this->hasMany(Homework::class, 'vak', 'name');
+        return $this->hasMany(Homework::class, 'subject', 'name');
     }
     public function flashcards()
     {

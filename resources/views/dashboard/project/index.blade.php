@@ -171,10 +171,10 @@
                             </span>
                                                         </div>
                                                         <div class="m-0">
-                                                            <h4 class="fw-bold text-gray-800 mb-2">{{ $werkstuk->vak }}</h4> <!-- Verkleinde margin onder de titel -->
+                                                            <h4 class="fw-bold text-gray-800 mb-2">{{ $werkstuk->subject }}</h4> <!-- Verkleinde margin onder de titel -->
                                                             <div class="d-flex flex-column flex-shrink-0 me-4">
                                 <span class="d-flex align-items-center fs-7 fw-bold text-gray-400 mb-1"> <!-- Verkleinde margin voor compactere lijst -->
-                                    <i class="ki-outline ki-briefcase fs-6 text-gray-600 me-2"></i>{{ $werkstuk->niveau }}
+                                    <i class="ki-outline ki-briefcase fs-6 text-gray-600 me-2"></i>{{ $werkstuk->level }}
                                 </span>
                                                                 <span class="d-flex align-items-center fs-7 fw-bold text-gray-400 mb-1"> <!-- Verkleinde margin voor compactere lijst -->
                                     <i class="ki-outline ki-note-2 fs-6 text-gray-600 me-2"></i>{{ $werkstuk->total_characters }} karakters

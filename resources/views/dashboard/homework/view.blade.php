@@ -147,7 +147,7 @@
                                                                             $activeClass = $isActive ? 'active' : 'text-gray-900';
                                                                         @endphp
                                                                         <a href="/huiswerk/view/{{ $row->unique_id }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">{{ $row->title }}</a>
-                                                                        <div class="fw-semibold fs-7 text-muted"><b>{{ $row->vak }}</b></div>
+                                                                        <div class="fw-semibold fs-7 text-muted"><b>{{ $row->subject }}</b></div>
                                                                     @endforeach
                                                                 </div>
                                                             </div>
@@ -173,14 +173,14 @@
                                     <div class="card card-flush h-lg-100" id="kt_contacts_main">
                                         <div class="card-header pt-7" id="kt_chat_contacts_header">
                                             <div class="card-title">
-                                                <h2>{{ $homework->vak }} - {{ $homework->title }}</h2>
+                                                <h2>{{ $homework->subject }} - {{ $homework->title }}</h2>
                                             </div>
                                         </div>
                                         <div class="card-body pt-1">
                                             <div class="d-flex gap-7 align-items-center">
                                                 <div class="d-flex flex-column gap-2">
                                                     <div class="d-flex align-items-center gap-2">
-                                                        <a class="text-muted text-hover-primary">Afmaken voor {{ $homework->inlever_date }}</a>
+                                                        <a class="text-muted text-hover-primary">Afmaken voor {{ $homework->return_date }}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,7 +194,7 @@
                                                 <div class="tab-pane fade show active" id="kt_contact_view_general" role="tabpanel">
                                                     <div class="d-flex flex-column gap-5 mt-7">
                                                         <div class="d-flex flex-column gap-1">
-                                                            <p>{!! $homework->beschrijving !!}</p>
+                                                            <p>{!! $homework->description !!}</p>
                                                         </div>
                                                     </div>
                                                 </div>

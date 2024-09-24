@@ -9,9 +9,9 @@ class CreateRoostersTable extends Migration
     public function up()
     {
         Schema::create('roosters', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('user_id');
-            $table->longText('roosters')->charset('utf8mb4')->collation('utf8mb4_bin');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('class_id');
+            $table->longText('data');
             $table->timestamps();
         });
     }

@@ -167,7 +167,7 @@
                                                                     <tbody>
                                                                     <?php foreach ($grades as $row): ?>
                                                                     <tr>
-                                                                        <td><?php echo $row->onderdeel; ?></td>
+                                                                        <td><?php echo $row->part; ?></td>
                                                                         <td><?php echo number_format($row->grade, 1); ?> (Weging: x<?php echo $row->weight; ?>)</td>
                                                                         <td><?php echo $row->created_at; ?></td>
                                                                     </tr>

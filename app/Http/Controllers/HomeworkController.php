@@ -22,7 +22,7 @@ class HomeworkController extends Controller
         // Query om het huiswerk op te halen
         $homework = DB::table('homework')
             ->where('user_id', $user_id)
-            ->orderBy('inlever_date')
+            ->orderBy('return_date')
             ->get();
 
         // Formatter voor de datum
@@ -39,7 +39,7 @@ class HomeworkController extends Controller
         // Groepeer de resultaten op inleverdatum
         $groupedResults = [];
         foreach ($homework as $row) {
-            $date = new DateTime($row->inlever_date);
+            $date = new DateTime($row->return_date);
             $inleverDate = $formatter->format($date);
 
             // Maak de eerste letter van de maand een hoofdletter
@@ -76,16 +76,16 @@ class HomeworkController extends Controller
             'd MMMM yyyy'
         );
 
-        // Format the inlever_date of the specific homework
-        $date = new DateTime($homework->inlever_date);
+        // Format the return_date of the specific homework
+        $date = new DateTime($homework->return_date);
         $homework->formatted_date = $formatter->format($date);
 
-        // Fetch other homework tasks grouped by inlever_date
+        // Fetch other homework tasks grouped by return_date
         $groupedResults = Homework::where('user_id', Auth::id())
-            ->orderBy('inlever_date')
+            ->orderBy('return_date')
             ->get()
             ->groupBy(function($item) use ($formatter) {
-                $date = new DateTime($item->inlever_date);
+                $date = new DateTime($item->return_date);
                 $formattedDate = $formatter->format($date);
 
                 // Ensure the first letter of the month is capitalized
@@ -109,7 +109,7 @@ class HomeworkController extends Controller
         // Query om het huiswerk op te halen
         $homework = DB::table('homework')
             ->where('user_id', $user_id)
-            ->orderBy('inlever_date')
+            ->orderBy('return_date')
             ->get();
 
         // Formatter voor de datum
@@ -126,7 +126,7 @@ class HomeworkController extends Controller
         // Groepeer de resultaten op inleverdatum
         $groupedResults = [];
         foreach ($homework as $row) {
-            $date = new DateTime($row->inlever_date);
+            $date = new DateTime($row->return_date);
             $inleverDate = $formatter->format($date);
 
             // Maak de eerste letter van de maand een hoofdletter en vervang spaties door underscores
@@ -170,15 +170,15 @@ class HomeworkController extends Controller
         );
 
         // Format de inleverdatum van het specifieke huiswerk
-        $date = new DateTime($homework->inlever_date);
+        $date = new DateTime($homework->return_date);
         $homework->formatted_date = $formatter->format($date);
 
         // Haal andere huiswerktaken op, gegroepeerd op inleverdatum
         $groupedResults = Homework::where('user_id', Auth::id())
-            ->orderBy('inlever_date')
+            ->orderBy('return_date')
             ->get()
             ->groupBy(function ($item) use ($formatter) {
-                $date = new DateTime($item->inlever_date);
+                $date = new DateTime($item->return_date);
                 $formattedDate = $formatter->format($date);
 
                 // Zorg ervoor dat de eerste letter van de maand een hoofdletter is en vervang spaties door underscores

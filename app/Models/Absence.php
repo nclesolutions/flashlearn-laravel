@@ -11,5 +11,5 @@ class Absence extends Model
     protected $table = 'absence';
     protected $primaryKey = 'unique_id';
     public $incrementing = false;
-    protected $fillable = ['user_id', 'reden', 'begintijd', 'eindtijd', 'gemaakt_date'];
+    protected $fillable = ['user_id', 'reason', 'start_time', 'end_time', 'given_date'];
 }

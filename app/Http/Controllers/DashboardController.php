@@ -29,14 +29,14 @@ class DashboardController extends Controller
         $huiswerkCount = Homework::where('user_id', $userId)->count();
 
         // Tel het aantal werkstukken voor de gebruiker
-        $werkstukCount = Assignment::where('owner_id', $userId)->count();
+        $werkstukCount = Assignment::where('user_id', $userId)->count();
 
         // Haal de werkstukken van de gebruiker op
-        $werkstukken = Assignment::where('owner_id', $userId)->get();
+        $werkstukken = Assignment::where('user_id', $userId)->get();
 
         // Haal de laatste 3 cijfers op voor de gebruiker
-        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.name', 'grades.onderdeel', 'grades.date_created')
-            ->join('subjects', 'grades.vak_id', '=', 'subjects.id')
+        $cijfers = Grade::select('grades.subject_id', 'grades.grade', 'subjects.name', 'grades.part', 'grades.date_created')
+            ->join('subjects', 'grades.subject_id', '=', 'subjects.id')
             ->where('grades.user_id', $userId)
             ->orderBy('grades.date_created', 'desc')
             ->limit(3)
@@ -92,14 +92,14 @@ class DashboardController extends Controller
         $huiswerkCount = Homework::where('user_id', $userId)->count();
 
         // Tel het aantal werkstukken voor de student
-        $werkstukCount = Assignment::where('owner_id', $userId)->count();
+        $werkstukCount = Assignment::where('user_id', $userId)->count();
 
         // Haal de werkstukken van de student op
-        $werkstukken = Assignment::where('owner_id', $userId)->get();
+        $werkstukken = Assignment::where('user_id', $userId)->get();
 
         // Haal de laatste 3 cijfers op voor de student
-        $cijfers = Grade::select('grades.vak_id', 'grades.grade', 'subjects.name as subject_name', 'grades.part', 'grades.created_at as date_created')
-            ->join('subjects', 'grades.vak_id', '=', 'subjects.id')
+        $cijfers = Grade::select('grades.subject_id', 'grades.grade', 'subjects.name as subject_name', 'grades.part', 'grades.created_at as date_created')
+            ->join('subjects', 'grades.subject_id', '=', 'subjects.id')
             ->where('grades.user_id', $userId)
             ->orderBy('grades.created_at', 'desc')
             ->limit(3)

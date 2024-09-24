@@ -109,7 +109,7 @@
                                         </div>
                                         <div class="input-group input-group-solid mb-5">
                                             <span class="input-group-text" id="basic-addon1">Niveau</span>
-                                            <select id="niveau" name="niveau" class="form-select rounded-start-0" aria-label="Niveau" aria-describedby="basic-addon1">
+                                            <select id="level" name="level" class="form-select rounded-start-0" aria-label="Niveau" aria-describedby="basic-addon1">
                                                 <option value="" disabled selected>Kies het niveau voor het werkstuk</option>
                                                 <option value="Makkelijk">Makkelijk</option>
                                                 <option value="Gemiddeld">Gemiddeld</option>
@@ -119,7 +119,7 @@
                                         <div class="input-group input-group-solid mb-5">
                                             <span class="input-group-text" id="basic-addon1">Vak</span>
                                             <div class="overflow-hidden flex-grow-1">
-                                                <select class="form-select rounded-start-0" data-control="select2" id="vak" name="vak" aria-label="Vak" data-placeholder="Selecteer een optie.">
+                                                <select class="form-select rounded-start-0" data-control="select2" id="subject" name="subject" aria-label="Vak" data-placeholder="Selecteer een optie.">
                                                     <option value="Wiskunde">Wiskunde</option>
                                                     <option value="Biologie">Biologie</option>
                                                     <option value="Nederlands">Nederlands</option>
