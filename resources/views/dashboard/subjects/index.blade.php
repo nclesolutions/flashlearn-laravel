@@ -101,14 +101,11 @@
                                                 </div>
                                                 @endif
                                                 @foreach ($subjects as $subject)
-                                                @php
-                                                $isActive = strtolower($subject->name) == strtolower($selectedSubject->name);
-                                                $activeClass = $isActive ? 'active text-primary' : 'text-gray-900';
-                                                @endphp
+
                                                 <div class="d-flex flex-stack py-4">
                                                     <div class="d-flex align-items-center">
                                                         <div class="ms-4">
-                                                            <a href="{{ url('/vak/bekijk/' . $subject->name) }}" class="fs-6 fw-bold {{ $activeClass }} text-hover-primary mb-2">{{ $subject->name }}</a>
+                                                            <a href="{{ url('/vak/bekijk/' . $subject->name) }}" class="fs-6 fw-bold text-hover-primary mb-2 text-gray-900">{{ $subject->name }}</a>
                                                             <div class="fw-semibold fs-7 text-muted">
                                                                 @if($subject->teacher && $subject->teacher->user)
                                                                 {{ substr($subject->teacher->user->firstname, 0, 1) }}. {{ $subject->teacher->user->lastname }}
