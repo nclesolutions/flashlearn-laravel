@@ -26,14 +26,14 @@ class ProfileController extends Controller
 
         // Haal de org_id (school_id) van de gebruiker op
         $userSchoolId = DB::table('students')
-            ->where('user_id', $account->id) // Gebruik $account->id in plaats van $account
+            ->where('user_id', Auth::id()) // Gebruik $account->id in plaats van $account
             ->value('org_id');
 
         // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
         $schoolInfo = null;
         if ($userSchoolId) {
             $schoolInfo = DB::table('schools')
-                ->where('org_id', $userSchoolId)
+                ->where('id', $userSchoolId)
                 ->first();
         }
 
@@ -57,19 +57,19 @@ class ProfileController extends Controller
 
         // Haal de biografie van de gebruiker op
         $biography = DB::table('users')
-            ->where('id', $account->id)
+            ->where('id', Auth::id())
             ->value('biography');
 
         // Haal de org_id (school_id) van de gebruiker op
         $userSchoolId = DB::table('students')
-            ->where('user_id', $account->id) // Gebruik $account->id in plaats van $account
+            ->where('user_id', Auth::id()) // Gebruik $account->id in plaats van $account
             ->value('org_id');
 
         // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
         $schoolInfo = null;
         if ($userSchoolId) {
             $schoolInfo = DB::table('schools')
-                ->where('org_id', $userSchoolId)
+                ->where('id', $userSchoolId)
                 ->first();
         }
 
@@ -157,14 +157,14 @@ class ProfileController extends Controller
 
         // Haal de org_id (school_id) van de gebruiker op
         $userSchoolId = DB::table('students')
-            ->where('user_id', $account->id) // Gebruik $account->id in plaats van $account
+            ->where('user_id', Auth::id()) // Gebruik $account->id in plaats van $account
             ->value('org_id');
 
         // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
         $schoolInfo = null;
         if ($userSchoolId) {
             $schoolInfo = DB::table('schools')
-                ->where('org_id', $userSchoolId)
+                ->where('id', $userSchoolId)
                 ->first();
         }
 
@@ -189,14 +189,14 @@ class ProfileController extends Controller
 
         // Haal de org_id (school_id) van de gebruiker op
         $userSchoolId = DB::table('students')
-            ->where('user_id', $account->id)
+            ->where('user_id', Auth::id())
             ->value('org_id');
 
         // Haal de schoolinformatie op als de gebruiker aan een school gekoppeld is
         $schoolInfo = null;
         if ($userSchoolId) {
             $schoolInfo = DB::table('schools')
-                ->where('org_id', $userSchoolId)
+                ->where('id', $userSchoolId)
                 ->first();
         }
 

@@ -147,7 +147,7 @@
                                                                         <!--end::Symbol-->
                                                                         <!--begin::Section-->
                                                                         <div class="me-2">
-                                                                            <a href="#" class="text-gray-800 text-hover-primary fs-6 fw-bold">{{ $schoolInfo->name }}</a>
+                                                                            <a href="{{$schoolInfo->website}}" class="text-gray-800 text-hover-primary fs-6 fw-bold">{{ $schoolInfo->name }}</a>
                                                                             <span class="text-gray-400 fw-bold d-block fs-7">School</span>
                                                                         </div>
                                                                         <!--end::Section-->
@@ -286,11 +286,11 @@
                                             </div>
 
                                             <div class="col-md-4">
-                                                <a href="#" class="card hover-elevate-up rounded parent-hover">
+                                                <a type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="card hover-elevate-up rounded parent-hover">
                                                     <div class="card-body d-flex align-items">
                                                         <i class="ki-duotone ki-timer fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
                                                         <span class="ms-3 text-gray-700 parent-hover-primary fs-6 fw-bold">
-                            Bekijk je huiswerk
+                            Vakanties
                         </span>
                                                     </div>
                                                 </a>
@@ -328,10 +328,49 @@
         <!--end::Page-->
     </div>
     <!--end::App-->
-    <!--begin::Javascript--
+    <!--begin::Javascript-->
+    <div class="modal fade" tabindex="-1" id="kt_modal_1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Schoolvakanties</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Vakantie</th>
+                            <th>Datum</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($holidays as $holiday)
+                        <tr>
+                            <td>{{ $holiday['name'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($holiday['date'])->format('d-m-Y') }}</td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Sluiten</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-<!-- Begin met het laden van jQuery -->
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Laad Bootstrap-bundel, die afhankelijk is van jQuery -->

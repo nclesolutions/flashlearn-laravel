@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +13,11 @@ class GradesController extends Controller
         // Get the logged-in user's ID
         $userId = Auth::id();
         $schoolId = session('org_id');
+        $classId = Student::where('user_id', $userId)->value('class_id');
 
         // Fetch the subjects related to the user's school
         $subjects = DB::table('subjects')
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -41,12 +43,12 @@ class GradesController extends Controller
     public function view($vak)
     {
         $userId = Auth::id();
-        $schoolId = session('org_id');
+        $classId = Student::where('user_id', $userId)->value('class_id');
 
         // Haal het vak op basis van de naam
         $subject = DB::table('subjects')
             ->where('name', $vak)
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->first();
 
         if (!$subject) {
@@ -61,7 +63,7 @@ class GradesController extends Controller
 
         // Haal alle vakken op voor de sidebar
         $subjects = DB::table('subjects')
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->orderBy('created_at', 'asc')
             ->get();
 

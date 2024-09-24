@@ -3,11 +3,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Holidays\Holidays;
 
 class SchoolController extends Controller
 {
     public function index()
     {
+        $holidays = Holidays::for('nl')->get(); // Haal Nederlandse vakanties op
         // User ID
         $userId = auth()->user()->id;
 
@@ -55,7 +57,8 @@ class SchoolController extends Controller
 
         return view('dashboard.school.index', [
             'newsletter' => $newsletter,
-            'schoolInfo' => $schoolInfo
+            'schoolInfo' => $schoolInfo,
+            'holidays' => $holidays
         ]);
     }
 

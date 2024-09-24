@@ -116,7 +116,118 @@
                             @if (session('orgName'))
                             <!--begin::Row-->
                             <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
-                                <!--begin::Col-->
+
+                                @if ($currentWeekRooster && !empty($currentWeekRooster['days']))
+                                    <div class="col-xl-12">
+                                        <div class="card rounded h-xl-100">
+                                            <div class="card-header position-relative py-0 border-bottom-2">
+                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
+                                                    @foreach ($currentWeekRooster['days'] as $index => $day)
+                                                        <li class="nav-item p-0 ms-0 me-8">
+                                                            <a id="day-tab-{{ $index + 1 }}" class="nav-link btn btn-color-muted px-0" data-bs-toggle="tab" href="#kt_table_widget_7_tab_content_{{ $index + 1 }}">
+                                                                <span class="nav-text fw-semibold fs-4 mb-3">{{ $day['day_of_week'] }}</span>
+                                                                <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                                <div class="d-flex align-items-center">
+                                                    <div id="week-info" class="text-gray-600 fw-bold me-3">
+                                                        <i class="fa fa-calendar-alt me-2"></i>
+                                                        <span id="week-dates">
+                            @php
+                                $startOfWeek = \Carbon\Carbon::now()->setISODate(date('Y'), $currentWeekRooster['week_number']);
+                                $startDate = $startOfWeek->format('d M Y');
+                                $endOfWeek = $startOfWeek->copy()->addDays(6);
+                                $endDate = $endOfWeek->format('d M Y');
+                            @endphp
+                            van {{ $startDate }} tot {{ $endDate }}
+                        </span>
+                                                    </div>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            @if ($currentWeekRooster['week_number'] == date('W'))
+                                                                Deze week
+                                                            @else
+                                                                Week {{ $currentWeekRooster['week_number'] }}
+                                                            @endif
+                                                        </button>
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            @foreach ($weeks as $week)
+                                                                @if ($week['week_number'] >= date('W'))
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="?week={{ $week['week_number'] }}">
+                                                                            @if ($week['week_number'] == date('W'))
+                                                                                Huidige week
+                                                                            @else
+                                                                                Week {{ $week['week_number'] }}
+                                                                            @endif
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="tab-content mb-2">
+                                                    @foreach ($currentWeekRooster['days'] as $index => $day)
+                                                        <div class="tab-pane fade" id="kt_table_widget_7_tab_content_{{ $index + 1 }}">
+                                                            <div class="table-responsive">
+                                                                <table class="table align-middle">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th class="min-w-150px p-0"></th>
+                                                                        <th class="min-w-200px p-0"></th>
+                                                                        <th class="min-w-100px p-0"></th>
+                                                                        <th class="min-w-80px p-0"></th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach ($day['schedule'] as $lesson)
+                                                                        @if ($lesson['lesson'] === 'Pauze')
+                                                                            <tr>
+                                                                                <td class="bg-light rounded text-gray-600 px-3 py-2" colspan="4"><b>Pauze</b>: {{ $lesson['time'] }}</td>
+                                                                            </tr>
+                                                                        @else
+                                                                            <tr>
+                                                                                <td class="fs-6 fw-bold text-gray-800">{{ $lesson['time'] }}</td>
+                                                                                <td class="fs-6 fw-bold text-gray-500">Les: <span class="text-gray-800">{{ $lesson['lesson'] }}</span></td>
+                                                                                <td class="fs-6 fw-bold text-gray-500">Lokaal: <span class="text-gray-800">{{ $lesson['location'] }}</span></td>
+                                                                                <td class="fs-6 fw-bold text-gray-500">Docent: <span class="text-gray-800">{{ $lesson['teacher'] }}</span></td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="col-xxl-12">
+                                        <div class="card rounded h-xl-100">
+                                            <div class="card-header position-relative py-0 border-bottom-2">
+                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
+                                                    <li class="nav-item p-0 ms-0 me-8">
+                                                        <a class="nav-link btn btn-color-dark px-0">
+                                                            <span class="nav-text fw-semibold fs-4 mb-3">Geen rooster gevonden.</span>
+                                                            <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Er is geen rooster ingepland voor deze week. Je hebt vrij, maar het kan zijn dat je toch naar school moet voor andere verplichtingen of evenementen. Controleer je planning regelmatig voor eventuele updates.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="col-xxl-6">
                                     <!--begin::Chart widget 22-->
                                     <div class="card rounded h-xl-100">
@@ -260,41 +371,41 @@
                                                     </thead>
                                                     <tbody>
                                                     @forelse ($cijfers as $cijfer)
-                                                        <tr>
-                                                            <td>
-                                                                @php
-                                                                    $color = '';
-                                                                    $status = '';
-                                                                    $badgeColor = '';
+                                                    <tr>
+                                                        <td>
+                                                            @php
+                                                            $color = '';
+                                                            $status = '';
+                                                            $badgeColor = '';
 
-                                                                    if ($cijfer->grade >= 6) {
-                                                                        $color = 'bg-success';
-                                                                        $status = 'Goedzo!';
-                                                                        $badgeColor = 'badge-light-success';
-                                                                    } elseif ($cijfer->grade >= 5.5) {
-                                                                        $color = 'bg-warning';
-                                                                        $status = 'Netjes!';
-                                                                        $badgeColor = 'badge-light-warning';
-                                                                    } else {
-                                                                        $color = 'bg-danger';
-                                                                        $status = 'Jammer!';
-                                                                        $badgeColor = 'badge-light-danger';
-                                                                    }
-                                                                @endphp
-                                                                <span data-kt-element="bullet" class="bullet bullet-vertical d-flex align-items-center h-40px {{ $color }}"></span>
-                                                            </td>
-                                                            <td>
-                                                                <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">Je hebt een <b>{{ $cijfer->grade }}</b> gehaald!</a>
-                                                                <span class="text-gray-400 fw-bold fs-7 d-block">{{ $cijfer->name }} - {{ $cijfer->onderdeel }}</span>
-                                                            </td>
-                                                            <td class="text-end">
-                                                                <span data-kt-element="status" class="badge {{ $badgeColor }}">{{ $status }}</span>
-                                                            </td>
-                                                        </tr>
+                                                            if ($cijfer->grade >= 6) {
+                                                            $color = 'bg-success';
+                                                            $status = 'Goedzo!';
+                                                            $badgeColor = 'badge-light-success';
+                                                            } elseif ($cijfer->grade >= 5.5) {
+                                                            $color = 'bg-warning';
+                                                            $status = 'Netjes!';
+                                                            $badgeColor = 'badge-light-warning';
+                                                            } else {
+                                                            $color = 'bg-danger';
+                                                            $status = 'Jammer!';
+                                                            $badgeColor = 'badge-light-danger';
+                                                            }
+                                                            @endphp
+                                                            <span data-kt-element="bullet" class="bullet bullet-vertical d-flex align-items-center h-40px {{ $color }}"></span>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary fw-bold fs-6">Je hebt een <b>{{ $cijfer->grade }}</b> gehaald!</a>
+                                                            <span class="text-gray-400 fw-bold fs-7 d-block">{{ $cijfer->name }}</span>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <span data-kt-element="status" class="badge {{ $badgeColor }}">{{ $status }}</span>
+                                                        </td>
+                                                    </tr>
                                                     @empty
-                                                        <tr>
-                                                            <td colspan="3" class="text-center text-gray-500">Je hebt nog geen cijfers behaald.</td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td colspan="3" class="text-center text-gray-500">Je hebt nog geen cijfers behaald.</td>
+                                                    </tr>
                                                     @endforelse
                                                     </tbody>
                                                 </table>
@@ -305,137 +416,6 @@
                                     <!--end::Tables Widget 2-->
                                 </div>
                                 <!--end::Col-->
-
-                                @if ($currentWeekRooster && !empty($currentWeekRooster['days']))
-                                    <div class="col-xl-12">
-                                        <div class="card rounded h-xl-100">
-                                            <div class="card-header position-relative py-0 border-bottom-2">
-                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
-                                                    @foreach ($currentWeekRooster['days'] as $index => $day)
-                                                        <li class="nav-item p-0 ms-0 me-8">
-                                                            <a id="day-tab-{{ $index + 1 }}" class="nav-link btn btn-color-muted px-0" data-bs-toggle="tab" href="#kt_table_widget_7_tab_content_{{ $index + 1 }}">
-                                                                <span class="nav-text fw-semibold fs-4 mb-3">{{ $day['day_of_week'] }}</span>
-                                                                <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                                <div class="d-flex align-items-center">
-                                                    <div id="week-info" class="text-gray-600 fw-bold me-3">
-                                                        <i class="fa fa-calendar-alt me-2"></i>
-                                                        <span id="week-dates">
-                            @php
-                                $startOfWeek = \Carbon\Carbon::now()->setISODate(date('Y'), $currentWeekRooster['week_number']);
-                                $startDate = $startOfWeek->format('d M Y');
-                                $endOfWeek = $startOfWeek->copy()->addDays(6);
-                                $endDate = $endOfWeek->format('d M Y');
-                            @endphp
-                            van {{ $startDate }} tot {{ $endDate }}
-                        </span>
-                                                    </div>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            @if ($currentWeekRooster['week_number'] == date('W'))
-                                                                Deze week
-                                                            @else
-                                                                Week {{ $currentWeekRooster['week_number'] }}
-                                                            @endif
-                                                        </button>
-                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            @foreach ($weeks as $week)
-                                                                @if ($week['week_number'] >= date('W'))
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="?week={{ $week['week_number'] }}">
-                                                                            @if ($week['week_number'] == date('W'))
-                                                                                Huidige week
-                                                                            @else
-                                                                                Week {{ $week['week_number'] }}
-                                                                            @endif
-                                                                        </a>
-                                                                    </li>
-                                                                @endif
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="tab-content mb-2">
-                                                    @foreach ($currentWeekRooster['days'] as $index => $day)
-                                                        <div class="tab-pane fade" id="kt_table_widget_7_tab_content_{{ $index + 1 }}">
-                                                            <div class="table-responsive">
-                                                                <table class="table align-middle">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th class="min-w-150px p-0"></th>
-                                                                        <th class="min-w-200px p-0"></th>
-                                                                        <th class="min-w-100px p-0"></th>
-                                                                        <th class="min-w-80px p-0"></th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    @foreach ($day['schedule'] as $lesson)
-                                                                        @if ($lesson['lesson'] === 'Pauze')
-                                                                            <tr>
-                                                                                <td class="bg-light rounded text-gray-600 px-3 py-2" colspan="4"><b>Pauze</b>: {{ $lesson['time'] }}</td>
-                                                                            </tr>
-                                                                        @else
-                                                                            <tr>
-                                                                                <td class="fs-6 fw-bold text-gray-800">{{ $lesson['time'] }}</td>
-                                                                                <td class="fs-6 fw-bold text-gray-500">Les: <span class="text-gray-800">{{ $lesson['lesson'] }}</span></td>
-                                                                                <td class="fs-6 fw-bold text-gray-500">Lokaal: <span class="text-gray-800">{{ $lesson['location'] }}</span></td>
-                                                                                <td class="fs-6 fw-bold text-gray-500">Docent: <span class="text-gray-800">{{ $lesson['teacher'] }}</span></td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="col-xxl-12">
-                                        <div class="card rounded h-xl-100">
-                                            <div class="card-header position-relative py-0 border-bottom-2">
-                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
-                                                    <li class="nav-item p-0 ms-0 me-8">
-                                                        <a class="nav-link btn btn-color-dark px-0">
-                                                            <span class="nav-text fw-semibold fs-4 mb-3">Geen rooster gevonden.</span>
-                                                            <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Er is geen rooster ingepland voor deze week. Je hebt vrij, maar het kan zijn dat je toch naar school moet voor andere verplichtingen of evenementen. Controleer je planning regelmatig voor eventuele updates.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                @if (Auth::user()->hasRole('Superadmin'))
-                                    <div class="col-xxl-12">
-                                        <div class="card rounded h-xl-100">
-                                            <div class="card-header position-relative py-0 border-bottom-2">
-                                                <ul class="nav nav-stretch nav-pills nav-pills-custom d-flex mt-3">
-                                                    <li class="nav-item p-0 ms-0 me-8">
-                                                        <a class="nav-link btn btn-color-dark px-0">
-                                                            <span class="nav-text fw-semibold fs-4 mb-3">Logs</span>
-                                                            <span class="bullet-custom position-absolute z-index-2 w-100 h-2px top-100 bottom-n100 bg-primary rounded"></span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>hoi</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
 
 
                             </div>
@@ -741,12 +721,32 @@ switch($werkstuk->vak) {
             const selectedWeekNumber = moment(selectedDate).isoWeek();
             window.location.href = '?week=' + selectedWeekNumber;
         });
+
+        // Controleer of het zaterdag of zondag is en zet de week vooruit naar de eerstvolgende maandag
+        const currentDayOfWeek = moment().isoWeekday(); // Maandag is 1, Zondag is 7
+        console.log("Huidige dag van de week (1=maandag, 7=zondag):", currentDayOfWeek);
+
+        if (currentDayOfWeek === 6) {
+            console.log("Het is zaterdag. De week wordt vooruit gezet naar de eerstvolgende maandag.");
+            const nextMonday = moment().add(1, 'weeks').startOf('isoWeek');
+            console.log("Volgende maandag valt in weeknummer:", nextMonday.isoWeek());
+            window.location.href = '?week=' + nextMonday.isoWeek();
+        } else if (currentDayOfWeek === 7) {
+            console.log("Het is zondag. De week wordt vooruit gezet naar de eerstvolgende maandag.");
+            const nextMonday = moment().add(1, 'weeks').startOf('isoWeek');
+            console.log("Volgende maandag valt in weeknummer:", nextMonday.isoWeek());
+            window.location.href = '?week=' + nextMonday.isoWeek();
+        } else {
+            console.log("Het is geen zaterdag of zondag. Geen aanpassing van de week nodig.");
+        }
     });
 </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var currentDayOfWeek = new Date().getDay();
+        console.log("Huidige dag van de week (0=zondag, 6=zaterdag):", currentDayOfWeek);
+
         var dayMapping = {
             0: 1, // Zondag wordt maandag
             1: 1,
@@ -756,21 +756,30 @@ switch($werkstuk->vak) {
             5: 5,
             6: 1 // Zaterdag wordt maandag
         };
+
         var currentDayIndex = dayMapping[currentDayOfWeek];
+        console.log("Geselecteerde dag index na mapping (1=maandag, etc.):", currentDayIndex);
+
         var currentTab = document.getElementById('day-tab-' + currentDayIndex);
         var currentContent = document.getElementById('kt_table_widget_7_tab_content_' + currentDayIndex);
+
         if (currentTab) {
             currentTab.classList.add('show', 'active');
+            console.log("Tab voor dag " + currentDayIndex + " is actief gemaakt.");
         } else {
             console.log('Tab niet gevonden voor dag:', currentDayIndex);
         }
+
         if (currentContent) {
             currentContent.classList.add('show', 'active');
+            console.log("Content voor dag " + currentDayIndex + " is actief gemaakt.");
         } else {
             console.log('Content niet gevonden voor dag:', currentDayIndex);
         }
     });
 </script>
+
+
 
 <!-- Begin met het laden van jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
