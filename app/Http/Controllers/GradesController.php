@@ -88,16 +88,16 @@ class GradesController extends Controller
         $userId = Auth::id();
 
         // Fetch the org_id (org_id) from the students table using the user ID
-        $schoolId = DB::table('students')
+        $classId = DB::table('students')
             ->where('user_id', $userId)
-            ->value('org_id');
+            ->value('class_id');
 
-        if (!$schoolId) {
-            return response()->json(['error' => 'School ID not found for the user'], 404);
+        if (!$classId) {
+            return response()->json(['error' => 'Class ID not found for the user'], 404);
         }
 
         $subjects = DB::table('subjects')
-            ->where('org_id', $schoolId)
+            ->where('class_id', $classId)
             ->orderBy('created_at', 'asc')
             ->get();
 

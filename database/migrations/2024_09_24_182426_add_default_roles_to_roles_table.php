@@ -29,6 +29,7 @@ class AddDefaultRolesToRolesTable extends Migration
     {
         // Verwijder de standaardrollen
         Role::where('name', 'Administrator')->delete();
+        Role::where('name', 'ICT')->delete();
         Role::where('name', 'Gebruiker')->delete();
     }
 }
