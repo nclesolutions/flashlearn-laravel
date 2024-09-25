@@ -89,24 +89,24 @@ class SubjectController extends Controller
         // Haal het ID van de ingelogde leerling op
         $userId = Auth::id();
 
-        // Haal het school ID van de leerling op uit de database
-        $schoolId = DB::table('students')
+        // Haal het class_id van de leerling op uit de database
+        $classId = DB::table('students')
             ->where('user_id', $userId)
-            ->value('org_id');
+            ->value('class_id');
 
-        if (!$schoolId) {
-            return response()->json(['error' => 'School ID not found'], 404);
+        if (!$classId) {
+            return response()->json(['error' => 'Class ID not found'], 404);
         }
 
-        // Haal alle vakken op die aan de school van de leerling zijn gekoppeld
+        // Haal alle vakken op die aan de klas van de leerling zijn gekoppeld
         $subjects = Subject::with(['teacher' => function ($query) {
-            $query->select('id', 'user_id', 'org_id', 'perm'); // Selecteer alleen de benodigde velden van teacher
+            $query->select('id', 'user_id', 'class_id', 'role'); // Selecteer alleen de benodigde velden van teacher
         }, 'teacher.user' => function ($query) {
             $query->select('id', 'firstname', 'lastname'); // Selecteer alleen de benodigde velden van user
         }])
-            ->where('org_id', $schoolId)
-            ->orderBy('gekregen_date', 'asc')
-            ->get(['id', 'org_id', 'teacher_id', 'gekregen_date', 'name']); // Selecteer alleen de benodigde velden van subject
+            ->where('class_id', $classId)
+            ->orderBy('created_at', 'asc')
+            ->get(['id', 'class_id', 'teacher_id', 'created_at', 'name']); // Selecteer alleen de benodigde velden van subject
 
         // Return the subjects as a JSON response
         return response()->json(['subjects' => $subjects]);
