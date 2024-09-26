@@ -69,14 +69,6 @@
                                     <span class="menu-title">Werkstukken</span>
                                 </a>
                             </div>
-                            <div class="menu-item">
-                                <a class="menu-link" href="{{ url('/boeken') }}">
-         <span class="menu-icon">
-         <i class="ki-outline ki-book fs-2"></i>
-         </span>
-                                    <span class="menu-title">Leesboeken</span>
-                                </a>
-                            </div>
                         </div>
                     </div>
                     @else

@@ -118,7 +118,7 @@
                                                         </div>
                                                         <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
                                                             <a href="javascript:void(0)" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-                                                                <i class="ki-outline ki-profile-circle fs-4 me-1"></i>{{ Auth::user()->getRoleNames()->first() }}</a>
+                                                                {{ Auth::user()->getRoleNames()->first() }}</a>
                                                             <a href="javascript:void(0)" class="d-flex align-items-center text-gray-400 text-hover-primary mb-2">
                                                                 <i class="ki-outline ki-sms fs-4 me-1"></i>{{ $account->email }}</a>
                                                         </div>
