@@ -153,31 +153,34 @@
                                                 <div class="tab-pane fade show active" id="kt_contact_view_general" role="tabpanel">
                                                     <!--begin::Additional details-->
                                                     <div class="d-flex flex-column gap-5 mt-7">
-                                                        <!--begin::Notes-->
-                                                        <div class="d-flex flex-column gap-1">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-rounded table-striped border gy-7 gs-7">
-                                                                    <thead>
-                                                                    <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
-                                                                        <th><b>Onderdeel</b></th>
-                                                                        <th><b>Cijfer</b></th>
-                                                                        <th><b>Ontvangen</b></th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <?php foreach ($grades as $row): ?>
-                                                                    <tr>
-                                                                        <td><?php echo $row->part; ?></td>
-                                                                        <td><?php echo number_format($row->grade, 1); ?> (Weging: x<?php echo $row->weight; ?>)</td>
-                                                                        <td><?php echo $row->created_at; ?></td>
-                                                                    </tr>
-                                                                    <?php endforeach; ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                        <!-- Check if there are any grades -->
+                                                        @if (count($grades) > 0)
+                                                        <div class="table-responsive">
+                                                            <table class="table table-rounded table-striped border gy-7 gs-7">
+                                                                <thead>
+                                                                <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                                                                    <th><b>Onderdeel</b></th>
+                                                                    <th><b>Cijfer</b></th>
+                                                                    <th><b>Ontvangen</b></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                @foreach ($grades as $row)
+                                                                <tr>
+                                                                    <td>{{ $row->part }}</td>
+                                                                    <td>{{ number_format($row->grade, 1) }} (Weging: x{{ $row->weight }})</td>
+                                                                    <td>{{ $row->created_at }}</td>
+                                                                </tr>
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
                                                         </div>
-                                                        <!--end::Notes-->
+                                                        @else
+                                                        <!-- No grades message -->
+                                                        <p class="text-muted">Er zijn nog geen cijfers beschikbaar voor dit vak.</p>
+                                                        @endif
                                                     </div>
+
                                                     <!--end::Additional details-->
                                                 </div>
                                                 <!--end:::Tab pane-->

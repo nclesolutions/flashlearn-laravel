@@ -292,7 +292,7 @@
                                                     <ul class="nav nav-pills d-flex flex-stack flex-nowrap scroll-x pb-2">
                                                         @foreach ($dagen as $index => $dag)
                                                             <li class="nav-item me-1">
-                                                                <a class="nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary {{ $index == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#kt_schedule_day_{{ $index }}">
+                                                                <a class="nav-link btn d-flex flex-column flex-center rounded min-w-45px me-2 py-4 px-3 text-gray-900 text-active-white btn-active-primary {{ $index == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#kt_schedule_day_{{ $index }}">
                                                                     <span class="opacity-50 fs-7 fw-semibold">{{ substr($dag, 0, 2) }}</span>
                                                                     <span class="fs-6 fw-bold">{{ now()->startOfWeek()->addDays($index)->format('d') }}</span>
                                                                 </a>
@@ -317,7 +317,7 @@
                                                                         </div>
                                                                     @endforeach
                                                                 @else
-                                                                    <p class="text-gray-600">Geen lessen op {{ $dag }}.</p>
+                                                                    <p class="text-muted">Je hebt geen {{$les['lesson']}} op {{ $dag }}.</p>
                                                                 @endif
                                                             </div>
                                                         @endforeach
