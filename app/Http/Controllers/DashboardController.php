@@ -9,6 +9,7 @@ use App\Models\Teacher;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -25,9 +26,18 @@ class DashboardController extends Controller
         // Haal de studentgegevens van de ingelogde gebruiker op
         $student = Student::where('user_id', $userId)->first();
 
-        // Tel het aantal huiswerkopdrachten voor de gebruiker
-        $huiswerkCount = Homework::where('user_id', $userId)->count();
+// Haal de user_id van de ingelogde gebruiker en class_id van de student op
+        $userId = Auth::id();
+        $student = Student::where('user_id', $userId)->first();
+        $classId = $student->class_id;
 
+// Haal alle study_guide_ids op die bij de klas horen
+        $studyGuideIds = DB::table('study_guides')
+            ->where('class_id', $classId)
+            ->pluck('id');
+
+// Tel het aantal huiswerkopdrachten voor de gebruiker, gebaseerd op study_guide_id
+        $huiswerkCount = Homework::whereIn('study_guide_id', $studyGuideIds)->count();
         // Tel het aantal werkstukken voor de gebruiker
         $werkstukCount = Assignment::where('user_id', $userId)->count();
 

@@ -34,7 +34,20 @@ class SubjectController extends Controller
         $currentWeek = now()->weekOfYear;
 
         // Haal het geselecteerde vak op met de gerelateerde leraar en gebruiker, gebaseerd op het klas ID
-        $selectedSubject = Subject::with(['teacher.user', 'homework'])
+// Haal de user_id van de ingelogde gebruiker en class_id van de student op
+        $userId = Auth::id();
+        $student = Student::where('user_id', $userId)->first();
+        $classId = $student->class_id;
+
+// Haal alle study_guide_ids op die bij de klas horen
+        $studyGuideIds = DB::table('study_guides')
+            ->where('class_id', $classId)
+            ->pluck('id');
+
+// Haal het geselecteerde vak op met de gerelateerde leraar en gebruiker, gebaseerd op class_id via study_guide_id
+        $selectedSubject = Subject::with(['teacher.user', 'homework' => function($query) use ($studyGuideIds) {
+            $query->whereIn('study_guide_id', $studyGuideIds);
+        }])
             ->where('class_id', $classId)
             ->where('name', $vak)
             ->first();

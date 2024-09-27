@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Homework;
+use App\Models\Student; // Vergeet niet om de Student model te importeren
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use IntlDateFormatter;
@@ -16,12 +17,21 @@ class HomeworkController extends Controller
             return redirect()->route('login');
         }
 
-        // Haal het huiswerk op voor de ingelogde gebruiker
-        $user_id = Auth::id();
+        // Haal de user_id van de ingelogde gebruiker op
+        $userId = Auth::id();
 
-        // Query om het huiswerk op te halen
+        // Haal de studentgegevens van de ingelogde gebruiker op
+        $student = Student::where('user_id', $userId)->first();
+        $classId = $student->class_id;
+
+        // Haal alle study_guide_ids op die bij de klas horen
+        $studyGuideIds = DB::table('study_guides')
+            ->where('class_id', $classId)
+            ->pluck('id');
+
+        // Query om het huiswerk op te halen op basis van study_guide_ids
         $homework = DB::table('homework')
-            ->where('user_id', $user_id)
+            ->whereIn('study_guide_id', $studyGuideIds)
             ->orderBy('return_date')
             ->get();
 
@@ -59,9 +69,14 @@ class HomeworkController extends Controller
     {
         // Fetch homework by ID
         $homework = Homework::where('unique_id', $id)->first();
+        $userId = Auth::id();
+        $student = Student::where('user_id', $userId)->first();
 
         // Check if homework belongs to the logged-in user
-        if ($homework->user_id != Auth::id()) {
+        if (!DB::table('study_guides')
+            ->where('id', $homework->study_guide_id)
+            ->where('class_id', $student->class_id)
+            ->exists()) {
             return redirect('/huiswerk');
         }
 
@@ -80,15 +95,21 @@ class HomeworkController extends Controller
         $date = new DateTime($homework->return_date);
         $homework->formatted_date = $formatter->format($date);
 
-        // Fetch other homework tasks grouped by return_date
-        $groupedResults = Homework::where('user_id', Auth::id())
+        // Haal andere huiswerktaken op voor de klas van de gebruiker
+        $userId = Auth::id();
+        $student = Student::where('user_id', $userId)->first();
+        $classId = $student->class_id;
+        $studyGuideIds = DB::table('study_guides')
+            ->where('class_id', $classId)
+            ->pluck('id');
+        $groupedResults = Homework::whereIn('study_guide_id', $studyGuideIds)
             ->orderBy('return_date')
             ->get()
-            ->groupBy(function($item) use ($formatter) {
+            ->groupBy(function ($item) use ($formatter) {
                 $date = new DateTime($item->return_date);
                 $formattedDate = $formatter->format($date);
 
-                // Ensure the first letter of the month is capitalized
+                // Zorg ervoor dat de eerste letter van de maand een hoofdletter is
                 $formattedDateParts = explode(' ', $formattedDate);
                 if (isset($formattedDateParts[1])) {
                     $formattedDateParts[1] = ucfirst($formattedDateParts[1]);
@@ -100,15 +121,24 @@ class HomeworkController extends Controller
         return view('dashboard.homework.view', compact('homework', 'groupedResults', 'id'));
     }
 
-    // API Endpoint: Haal al het huiswerk op voor de ingelogde gebruiker
+    // API Endpoint: Haal al het huiswerk op voor de ingelogde gebruiker op basis van de klas
     public function APIIndex()
     {
         // Zorg ervoor dat de gebruiker is geauthenticeerd
-        $user_id = Auth::id();
+        $userId = Auth::id();
 
-        // Query om het huiswerk op te halen
+        // Haal de studentgegevens op
+        $student = Student::where('user_id', $userId)->first();
+        $classId = $student->class_id;
+
+        // Haal alle study_guide_ids op die bij de klas horen
+        $studyGuideIds = DB::table('study_guides')
+            ->where('class_id', $classId)
+            ->pluck('id');
+
+        // Query om het huiswerk op te halen op basis van study_guide_ids
         $homework = DB::table('homework')
-            ->where('user_id', $user_id)
+            ->whereIn('study_guide_id', $studyGuideIds)
             ->orderBy('return_date')
             ->get();
 
@@ -173,11 +203,19 @@ class HomeworkController extends Controller
         $date = new DateTime($homework->return_date);
         $homework->formatted_date = $formatter->format($date);
 
-        // Haal andere huiswerktaken op, gegroepeerd op inleverdatum
-        $groupedResults = Homework::where('user_id', Auth::id())
+        // Haal andere huiswerktaken op voor de klas van de gebruiker
+        $userId = Auth::id();
+        $student = Student::where('user_id', $userId)->first();
+        $classId = $student->class_id;
+        $studyGuideIds = DB::table('study_guides')
+            ->where('class_id', $classId)
+            ->pluck('id');
+        $groupedResults = Homework::whereIn('study_guide_id', $studyGuideIds)
             ->orderBy('return_date')
             ->get()
-            ->groupBy(function ($item) use ($formatter) {
+            ->groupBy(/**
+             * @throws \Exception
+             */ function ($item) use ($formatter) {
                 $date = new DateTime($item->return_date);
                 $formattedDate = $formatter->format($date);
 

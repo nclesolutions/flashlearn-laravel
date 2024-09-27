@@ -11,7 +11,7 @@ class Homework extends Model
     protected $table = 'homework';
 
     protected $fillable = [
-        'user_id',
+        'study_guide_id',  // Include study_guide_id if not present
         'unique_id',
         'subject',  // Assuming 'vak' is a valid column representing the subject
         'title',
